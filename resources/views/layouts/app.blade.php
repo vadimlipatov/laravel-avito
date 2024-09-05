@@ -10,9 +10,6 @@
 
     <title>Adverts</title>
 
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'build') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
@@ -22,7 +19,7 @@
 </head>
 <body id="app">
     <header>
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+        <nav class="navbar navbar-expand-md navbar-dark">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -73,8 +70,21 @@
         </nav>
     </header>
 
-    <main class="py-4">
-        @yield('content')
+    <main class="app-content py-3">
+        <div class="container">
+            @yield('content')
+        </div>
     </main>
+
+    <footer>
+        <div class="container">
+            <div class="border-top pt-3">
+                <p class="text-center">&copy; {{date('Y')}} - Adverts</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ mix('js/app.js', 'build') }}" defer></script>
 </body>
 </html>
