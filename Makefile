@@ -8,7 +8,7 @@ docker-build:
 	docker-compose up -d --build
 
 test:
-	docker exec app-php-cli-1 php vendor/bin/phpunit --colors=always
+	docker-compose exec php-cli php vendor/bin/phpunit --colors=always
 
 perm:
 	sudo chown ${USER}:${USER} bootstrap/cache -R
@@ -17,13 +17,13 @@ perm:
 	if [-d "public/build"]; then sudo chown ${USER}:${USER} public/build -R; fi
 
 assets-install:
-	docker exec app-node-1 yarn install
+	docker-compose exec node yarn install
 
 assets-dev:
-	docker exec app-node-1 yarn run dev
+	docker-compose exec node yarn run dev
 
 assets-prod:
-	docker exec app-node-1 yarn run prod
+	docker-compose exec node yarn run prod
 
 assets-watch:
-	docker exec app-node-1 yarn run watch
+	docker-compose exec node yarn run watch

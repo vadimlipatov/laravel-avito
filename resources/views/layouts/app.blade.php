@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Adverts</title>
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'build') }}" defer></script>
@@ -20,8 +20,8 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css', 'build') }}" rel="stylesheet">
 </head>
-<body>
-    <div id="app">
+<body id="app">
+    <header>
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -57,7 +57,7 @@
                                     <a class="dropdown-item" href="{{ route('cabinet') }}">Cabinet</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                 document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
 
@@ -71,10 +71,10 @@
                 </div>
             </div>
         </nav>
+    </header>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+    <main class="py-4">
+        @yield('content')
+    </main>
 </body>
 </html>
