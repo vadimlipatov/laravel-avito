@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
  * @property string $name
- * @property string email
- * @property string status
+ * @property string $email
+ * @property string $password
+ * @property string $verify_token
+ * @property string $status
  */
 class User extends Authenticatable
 {
@@ -19,14 +22,62 @@ class User extends Authenticatable
     public const STATUS_ACTIVE = 'active';
 
     protected $fillable = [
-        'name', 'email', 'password', 'status'
+        'name',
+        'email',
+        'password',
+        'status'
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    public function getStatuses() {
+    public static function register($name, $email, $password)
+    {
+        return static::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+            'verify_token' => Str::uuid(),
+            'status' => self::STATUS_WAIT,
+        ]);
+    }
+
+    public static function new($name, $email)
+    {
+        return static::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt(Str::random()),
+            'status' => self::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function verify()
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException("User is already verified.");
+        }
+
+        $this->update([
+            'status' => self::STATUS_ACTIVE,
+            'verify_token' => null
+        ]);
+    }
+
+    public function isWait()
+    {
+        return $this->status === self::STATUS_WAIT;
+    }
+
+    public function isActive()
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public static function getStatuses()
+    {
         return [
             self::STATUS_WAIT => 'Waiting',
             self::STATUS_ACTIVE => 'Active',

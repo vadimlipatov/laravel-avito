@@ -42,7 +42,7 @@ Breadcrumbs::for('admin.home', function ($trail) {
 
 Breadcrumbs::for('admin.users.index', function ($trail) {
     $trail->parent('admin.home');
-    $trail->push('Users', route('admin.users.home'));
+    $trail->push('Users', route('admin.users.index'));
 });
 
 Breadcrumbs::for('admin.users.create', function ($trail) {
