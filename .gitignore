@@ -2,7 +2,9 @@
 /public/hot
 /public/storage
 /public/build
-/storage
+/storage/.*key
+/storage/docker
+/storage/debugbar
 /vendor
 /.idea
 /.vscode
