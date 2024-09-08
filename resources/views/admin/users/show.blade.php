@@ -7,7 +7,11 @@
 
     <div class="d-flex flex-row mb-3">
         <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary mr-1">Edit</a>
-        <form action="{{ route('admin.users.update', $user) }}" class="mr-1">
+        <form method="POST" action="{{ route('admin.users.verify', $user) }}" class="mr-1">
+            @csrf
+            <button class="btn btn-success">Verify</button>
+        </form>
+        <form method="POST" action="{{ route('admin.users.update', $user) }}" class="mr-1">
             @csrf
             @method('DELETE')
             <button class="btn btn-danger">Delete</button>
@@ -31,10 +35,10 @@
             <tr>
                 <th>Status</th>
                 <td>
-                    @if ($user->status->isActive())
+                    @if ($user->isActive())
                         <span class="badge badge-primary">Active</span>
                     @endif
-                    @if ($user->status->isWait())
+                    @if ($user->isWait())
                         <span class="badge badge-secondary">Waiting</span>
                     @endif
                 </td>

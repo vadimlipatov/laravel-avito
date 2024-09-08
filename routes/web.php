@@ -21,5 +21,6 @@ Route::group(
     function () {
         Route::get('/', 'HomeController@index')->name('home');
         Route::resource('users', 'UsersController');
+        Route::get('/verify', 'UsersController@verify')->name('users.verify');
     }
 );
