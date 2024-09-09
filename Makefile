@@ -13,6 +13,7 @@ test:
 perm:
 	sudo chown ${USER}:${USER} bootstrap/cache -R
 	sudo chown ${USER}:${USER} storage -R
+	sudo chmod 777 -R storage
 	if [-d "node_modules"]; then sudo chown ${USER}:${USER} node_modules -R; fi
 	if [-d "public/build"]; then sudo chown ${USER}:${USER} public/build -R; fi
 
