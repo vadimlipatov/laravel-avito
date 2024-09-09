@@ -3,10 +3,13 @@
 namespace Tests\Unit\Entity\User;
 
 use App\Entity\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function testRequest(): void
     {
         $user = User::register(
@@ -19,12 +22,12 @@ class RegisterTest extends TestCase
 
         self::assertEquals($name, $user->name);
         self::assertEquals($email, $user->email);
-
         self::assertNotEmpty($user->password);
         self::assertNotEquals($password, $user->password);
 
         self::assertTrue($user->isWait());
         self::assertFalse($user->isActive());
+        // self::assertFalse($user->isAdmin());
     }
 
     public function testVerify(): void

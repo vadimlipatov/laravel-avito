@@ -3,12 +3,12 @@
 namespace Tests\Unit\Entity\User;
 
 use App\Entity\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class CreateTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseTransactions;
 
     public function testNew(): void
     {
@@ -24,5 +24,6 @@ class CreateTest extends TestCase
         self::assertNotEmpty($user->password);
 
         self::assertTrue($user->isActive());
+        // self::assertTrue($user->isAdmin());
     }
 }
