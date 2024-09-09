@@ -23,21 +23,19 @@ class CreateAdmin extends Command
     {
         $name = $this->argument('name');
         $email = $this->argument('email');
-        $password = Hash::make($this->argument('password')); // Хешируем пароль
+        $password = Hash::make($this->argument('password'));
 
-        // Проверка, существует ли пользователь с таким email
         if (User::where('email', $email)->exists()) {
             $this->error('Пользователь с таким email уже существует.');
             return;
         }
 
-        // Создаем нового пользователя с ролью 'admin'
         User::create([
             'name' => $name,
             'email' => $email,
             'password' => $password,
             'status' => User::STATUS_ACTIVE,
-            // 'role' => User::ROLE_ADMIN,
+            'role' => User::ROLE_ADMIN,
         ]);
 
         $this->info('Администратор успешно создан!');

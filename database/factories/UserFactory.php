@@ -14,5 +14,6 @@ $factory->define(User::class, function (Faker $faker) {
         'verify_token' => $status === User::STATUS_ACTIVE ? null :  Str::uuid(),
         'remember_token' => str_random(10),
         'status' => $status,
+        'role' => User::ROLE_USER,
     ];
 });

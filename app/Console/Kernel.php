@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\RemoveComments::class,
         \App\Console\Commands\User\CreateAdmin::class,
         \App\Console\Commands\User\VerifyCommand::class,
+        \App\Console\Commands\User\RoleCommand::class,
     ];
 
     /**

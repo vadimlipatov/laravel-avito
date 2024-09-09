@@ -19,7 +19,8 @@ class UsersController extends Controller
 
     public function index()
     {
-        $users = User::orderBy('id', 'desc')->paginate(20);
+        $users = User::orderByDesc('id')->paginate(20);
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -28,11 +29,11 @@ class UsersController extends Controller
         return view('admin.users.create');
     }
 
-    public function store(UpdateRequest $request)
+    public function store(CreateRequest $request)
     {
         $user = User::new(
-            $request->name,
-            $request->email
+            $request['name'],
+            $request['email']
         );
 
         return redirect()->route('admin.users.show', $user);
@@ -45,12 +46,23 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $statuses = [
+            User::STATUS_WAIT => 'Waiting',
+            User::STATUS_ACTIVE => 'Active',
+        ];
+
+        $roles = [
+            User::ROLE_USER => 'User',
+            User::ROLE_ADMIN => 'Admin',
+            User::ROLE_MODERATOR => 'Moderator',
+        ];
+
+        return view('admin.users.edit', compact('user', 'statuses', 'roles'));
     }
 
     public function update(UpdateRequest $request, User $user)
     {
-        $user->update($request->only('name', 'email', 'status'));
+        $user->update($request->only(['name', 'email', 'role']));
 
         return redirect()->route('admin.users.show', $user);
     }

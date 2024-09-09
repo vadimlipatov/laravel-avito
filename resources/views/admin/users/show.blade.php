@@ -9,14 +9,14 @@
         @if ($user->isWait())
             <form method="POST" action="{{ route('admin.users.verify', $user) }}" class="mr-1">
                 @csrf
-                <button class="btn btn-success">Verify</button>
+                <button type="submit" class="btn btn-success">Verify</button>
             </form>
         @endif
 
         <form method="POST" action="{{ route('admin.users.update', $user) }}" class="mr-1">
             @csrf
             @method('DELETE')
-            <button class="btn btn-danger">Delete</button>
+            <button type="Submit" class="btn btn-danger">Delete</button>
         </form>
     </div>
 
@@ -42,6 +42,17 @@
                     @endif
                     @if ($user->isWait())
                         <span class="badge badge-secondary">Waiting</span>
+                    @endif
+                </td>
+
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>
+                    @if ($user->isAdmin())
+                        <span class="badge badge-danger">Admin</span>
+                    @else
+                        <span class="badge badge-secondary">User</span>
                     @endif
                 </td>
             </tr>
