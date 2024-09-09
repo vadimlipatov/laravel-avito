@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
  * @property string $password
  * @property string $verify_token
  * @property string $status
+ * @property string $role
  */
 class User extends Authenticatable
 {
@@ -21,11 +22,16 @@ class User extends Authenticatable
     public const STATUS_WAIT = 'wait';
     public const STATUS_ACTIVE = 'active';
 
+    public const ROLE_USER = 'user';
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_MODERATOR = 'moderator';
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'status',
+        'role',
         'verify_token',
     ];
 
@@ -41,6 +47,7 @@ class User extends Authenticatable
             'email' => $email,
             'password' => bcrypt($password),
             'verify_token' => Str::uuid(),
+            'role' => self::ROLE_USER,
             'status' => self::STATUS_WAIT,
         ]);
     }
@@ -51,6 +58,7 @@ class User extends Authenticatable
             'name' => $name,
             'email' => $email,
             'password' => bcrypt(Str::random()),
+            'role' => self::ROLE_USER,
             'status' => self::STATUS_ACTIVE,
         ]);
     }
@@ -75,5 +83,23 @@ class User extends Authenticatable
     public function isActive()
     {
         return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function changeRole($role)
+    {
+        if (!\in_array($role, [self::ROLE_ADMIN, self::ROLE_USER], true)) {
+            throw new \InvalidArgumentException("Undefined role '{$role}'");
+        }
+
+        if ($this->role === $role) {
+            throw new \DomainException("Role is already assigned.");
+        }
+
+        $this->update(['role' => $role]);
     }
 }
