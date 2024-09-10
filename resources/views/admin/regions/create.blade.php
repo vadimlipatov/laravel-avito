@@ -3,7 +3,7 @@
 @section('content')
     @include('admin.regions._nav')
 
-    <form action="{{ route('admin.regions.store') }}" method="post">
+    <form method="POST" action="{{ route('admin.regions.store', ['parent' => $parent ? $parent->id : null]) }}">
         @csrf
 
         <div class="form-group">
@@ -21,21 +21,6 @@
                 name="slug" value="{{ old('slug') }}" required>
             @if ($errors->has('slug'))
                 <span class="invalid-feedback"><strong>{{ $errors->first('slug') }}</strong></span>
-            @endif
-        </div>
-
-        <div class="form-group">
-            <label for="parent" class="col-form-label">Parent</label>
-            <select id="parent" class="form-control{{ $errors->has('parent') ? ' is-invalid' : '' }}" name="parent">
-                <option value="" disabled>Choose parent</option>
-                @foreach (collect() as $value => $label)
-                    <option value="{{ $value }}"
-                        {{ $value === old('parent', $region->parent->name) ? ' selected' : '' }}>
-                        {{ $label }}</option>
-                @endforeach
-            </select>
-            @if ($errors->has('parent'))
-                <span class="invalid-feedback"><strong>{{ $errors->first('roparentle') }}</strong></span>
             @endif
         </div>
 

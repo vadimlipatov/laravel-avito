@@ -26,21 +26,6 @@
         </div>
 
         <div class="form-group">
-            <label for="parent" class="col-form-label">Parent</label>
-            <select id="parent" class="form-control{{ $errors->has('parent') ? ' is-invalid' : '' }}" name="parent">
-                <option value="" disabled>Choose parent</option>
-                @foreach (collect() as $value => $label)
-                    <option value="{{ $value }}"
-                        {{ $value === old('parent', $region->parent->name) ? ' selected' : '' }}>
-                        {{ $label }}</option>
-                @endforeach
-            </select>
-            @if ($errors->has('parent'))
-                <span class="invalid-feedback"><strong>{{ $errors->first('roparentle') }}</strong></span>
-            @endif
-        </div>
-
-        <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>

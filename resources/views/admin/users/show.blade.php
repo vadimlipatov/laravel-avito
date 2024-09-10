@@ -20,7 +20,7 @@
         </form>
     </div>
 
-    <table class="table table bordered/table-striped">
+    <table class="table table-bordered table-striped">
         <tbody>
             <tr>
                 <th>ID</th>

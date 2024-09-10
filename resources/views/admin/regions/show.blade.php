@@ -13,7 +13,7 @@
         </form>
     </div>
 
-    <table class="table table bordered/table-striped">
+    <table class="table table-bordered table-striped">
         <tbody>
             <tr>
                 <th>ID</th>
@@ -27,12 +27,15 @@
                 <th>Slug</th>
                 <td>{{ $region->slug }}</td>
             </tr>
-            <tr>
-                <th>Parent</th>
-                <td>
-                    {{ $region->parent->name ?? '' }}
-                </td>
-            </tr>
         </tbody>
     </table>
+
+    <p>
+        <a href="{{ route('admin.regions.create', ['parent' => $region->id ?? null]) }}" class="btn btn-success">Add
+            Subregion</a>
+    </p>
+
+    @if ($children->count())
+        @include('admin.regions._list', ['regions' => $children])
+    @endif
 @endsection

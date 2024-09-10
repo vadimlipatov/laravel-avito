@@ -20,8 +20,12 @@ Route::group(
     ],
     function () {
         Route::get('/', 'HomeController@index')->name('home');
+
+        // Users
         Route::resource('users', 'UsersController');
         Route::post('/users/{user}/verify', 'UsersController@verify')->name('users.verify');
+
+        // Regions
         Route::resource('regions', 'RegionsController');
     }
 );
