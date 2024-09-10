@@ -1,13 +1,13 @@
 <?php
 
-//Home
+// Home
 Route::get('/', 'HomeController@index')->name('home');
 
-//Auth
+// Auth
 Auth::routes();
 Route::get('/verify/{token}', 'Auth\RegisterController@verify')->name('register.verify');
 
-//Cabinet
+// Cabinet
 Route::get('/cabinet', 'Cabinet\HomeController@index')->name('cabinet');
 
 // Admin
@@ -16,11 +16,11 @@ Route::group(
         'prefix' => 'admin',
         'as' => 'admin.',
         'namespace' => 'Admin',
-        'middleware' => ['auth'],
+        'middleware' => ['auth', 'can:admin-panel'],
     ],
     function () {
         Route::get('/', 'HomeController@index')->name('home');
         Route::resource('users', 'UsersController');
-        Route::post('/verify/{user}', 'UsersController@verify')->name('users.verify');
+        Route::post('/users/verify/{user}', 'UsersController@verify')->name('users.verify');
     }
 );
