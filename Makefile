@@ -31,3 +31,6 @@ assets-watch:
 
 admin:
 	docker-compose exec php-cli php artisan make:admin Admin admin@mail.ru 123
+
+dump:
+	docker-compose exec php-cli php composer.phar dump-autoload
