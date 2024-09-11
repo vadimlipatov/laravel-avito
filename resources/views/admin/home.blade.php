@@ -9,6 +9,9 @@
             <a href="{{ route('admin.users.index') }}" class="nav-link">Users</a>
         </li>
         <li class="nav-item">
+            <a href="{{ route('admin.adverts.categories.index') }}" class="nav-link">Categories</a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('admin.regions.index') }}" class="nav-link">Regions</a>
         </li>
     </ul>

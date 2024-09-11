@@ -13,7 +13,7 @@
             </form>
         @endif
 
-        <form method="POST" action="{{ route('admin.users.update', $user) }}" class="mr-1">
+        <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="mr-1">
             @csrf
             @method('DELETE')
             <button type="Submit" class="btn btn-danger">Delete</button>

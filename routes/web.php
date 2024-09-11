@@ -27,5 +27,13 @@ Route::group(
 
         // Regions
         Route::resource('regions', 'RegionsController');
+
+        // Adverts > Categories
+        Route::group(
+            ['prefix' => 'adverts', 'as' => 'adverts.', 'namespace' => 'Adverts'],
+            function () {
+                Route::resource('categories', 'CategoryController');
+            }
+        );
     }
 );
