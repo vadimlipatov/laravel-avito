@@ -3,12 +3,12 @@
 @section('breadcrumbs', '')
 
 @section('content')
-<div class="row justify-content-center">
+  <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">Hello</div>
-            <div class="card-body">Your site</div>
-        </div>
+      <div class="card">
+        <div class="card-header">Hello</div>
+        <div class="card-body">Your site</div>
+      </div>
     </div>
-</div>
+  </div>
 @endsection
