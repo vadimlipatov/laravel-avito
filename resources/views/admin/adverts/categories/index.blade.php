@@ -28,19 +28,27 @@
         <div class="d-flex flex-row">
           <form class="mr-1" action="{{ route('admin.adverts.categories.first', $category) }}" method="POST">
             @csrf
-            <button type="submit" class="btn btn-sm btn-outline-primary">First</button>
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              <i class="fa fa-angle-double-up" aria-hidden="true"></i>
+            </button>
           </form>
           <form class="mr-1" action="{{ route('admin.adverts.categories.up', $category) }}" method="POST">
             @csrf
-            <button type="submit" class="btn btn-sm btn-outline-primary">Up</button>
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              <i class="fa fa-angle-up" aria-hidden="true"></i>
+            </button>
           </form>
           <form class="mr-1" action="{{ route('admin.adverts.categories.down', $category) }}" method="POST">
             @csrf
-            <button type="submit" class="btn btn-sm btn-outline-primary">Down</button>
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </button>
           </form>
           <form class="mr-1" action="{{ route('admin.adverts.categories.last', $category) }}" method="POST">
             @csrf
-            <button type="submit" class="btn btn-sm btn-outline-primary">Last</button>
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              <i class="fa fa-angle-double-down" aria-hidden="true"></i>
+            </button>
           </form>
         </div>
       </td>
