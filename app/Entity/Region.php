@@ -4,6 +4,11 @@ namespace App\Entity;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property string $name
+ * @property string $slug
+ * @property int $parent_id
+ */
 class Region extends Model
 {
     protected $fillable = ['name', 'slug', 'parent_id'];
