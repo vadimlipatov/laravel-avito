@@ -29,4 +29,16 @@ class Category extends Model
     {
         return $this->hasMany(Attribute::class, 'category_id', 'id');
     }
+
+    public function parentAttributes()
+    {
+        return  $this->parent ? $this->parent->allAttributes() : [];
+    }
+
+    public function allAttributes()
+    {
+        $parent = $this->parentAttributes();
+        $owm = $this->attributes()->orderBy('sort')->getModels();
+        return array_merge($parent, $owm);
+    }
 }
