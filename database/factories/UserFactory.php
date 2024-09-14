@@ -8,6 +8,7 @@ $factory->define(User::class, function (Faker $faker) {
     $active = $faker->boolean;
     return [
         'name' => $this->faker->name,
+        'last_name' => $faker->lastName,
         'email' => $this->faker->unique()->safeEmail,
         'password' => '$2y$10$aymrH9UbPv/ccDOnJbu74eTgwtr3oR8GCvvjZMMlHT9GIJIPV5SEi', // secret
         'remember_token' => str_random(10),

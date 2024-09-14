@@ -8,7 +8,22 @@ Auth::routes();
 Route::get('/verify/{token}', 'Auth\RegisterController@verify')->name('register.verify');
 
 // Cabinet
-Route::get('/cabinet', 'Cabinet\HomeController@index')->name('cabinet');
+Route::group(
+	[
+		'prefix' => 'cabinet',
+		'as' => 'cabinet.',
+		'namespace' => 'Cabinet',
+		'middleware' => ['auth'],
+	],
+	function () {
+		Route::get('/', 'HomeController@index')->name('home');
+
+		// Profile
+		Route::get('/profile', 'ProfileController@index')->name('profile.home');
+        Route::get('/profile/edit', 'ProfileController@edit')->name('profile.edit');
+        Route::put('/profile/update', 'ProfileController@update')->name('profile.update');
+	}
+);
 
 // Admin
 Route::group(
