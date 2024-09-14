@@ -15,6 +15,9 @@ use Illuminate\Support\Str;
  * @property string $verify_token
  * @property string $status
  * @property string $role
+ * @property string $phone
+ * @property bool $phone_verified
+ * @property string $phone_verify_token
  */
 class User extends Authenticatable
 {
@@ -31,6 +34,9 @@ class User extends Authenticatable
         'name',
         'last_name',
         'email',
+        'phone',
+        'phone_verified',
+        'phone_verify_token',
         'password',
         'status',
         'role',
