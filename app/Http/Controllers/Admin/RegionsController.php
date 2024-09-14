@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\region\UpdateRequest;
 use Illuminate\Http\Request;
 
 class RegionsController extends Controller

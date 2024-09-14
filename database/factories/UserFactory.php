@@ -5,15 +5,14 @@ use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
 $factory->define(User::class, function (Faker $faker) {
-    $status = $faker->randomElement([User::STATUS_ACTIVE, User::STATUS_WAIT]);
-
+    $active = $faker->boolean;
     return [
         'name' => $this->faker->name,
         'email' => $this->faker->unique()->safeEmail,
         'password' => '$2y$10$aymrH9UbPv/ccDOnJbu74eTgwtr3oR8GCvvjZMMlHT9GIJIPV5SEi', // secret
-        'verify_token' => $status === User::STATUS_ACTIVE ? null :  Str::uuid(),
         'remember_token' => str_random(10),
-        'status' => $status,
-        'role' => User::ROLE_USER,
+        'verify_token' => $active ? null :  Str::uuid(),
+        'role' => $active ? $faker->randomElement([User::ROLE_USER, User::ROLE_ADMIN]) : User::ROLE_USER,
+        'status' => $active ? User::STATUS_ACTIVE : User::STATUS_WAIT,
     ];
 });
