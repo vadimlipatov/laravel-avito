@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers\Cabinet;
 
-use App\Entity\Region;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-
     public function index(Request $request)
     {
         $user = Auth::user();
 
         return view('cabinet.profile.home', compact('user'));
     }
-
 
     public function edit()
     {
@@ -34,10 +31,17 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
+        $oldPhone = $user->phone;
+
         $user->update([
             'name' => $request['name'],
             'last_name' => $request['last_name'],
+            'phone' => $request['phone'],
         ]);
+
+        if ($user->phone !== $oldPhone) {
+            $user->unverifyPhone();
+        }
 
         return redirect()->route('cabinet.profile.home');
     }
