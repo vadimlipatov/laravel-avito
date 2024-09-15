@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\Entity\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use Auth;
-use Dotenv\Exception\ValidationException;
+use App\Services\Sms\SmsSender;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
     use ThrottlesLogins;
 
-    public function __construct()
+    private $sms;
+
+    public function __construct(SmsSender $sms)
     {
         $this->middleware('guest')->except('logout');
+        $this->sms = $sms;
     }
 
     public function showLoginForm()

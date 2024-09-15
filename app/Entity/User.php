@@ -15,11 +15,11 @@ use Illuminate\Support\Str;
  * @property string $password
  * @property string $verify_token
  * @property string $phone
+ * @property bool   $phone_auth
  * @property bool   $phone_verified
  * @property string $phone_verify_token
  * @property Carbon $phone_verify_token_expire
  * @property string $status
- * @property string $role
  */
 class User extends Authenticatable
 {
@@ -161,5 +161,22 @@ class User extends Authenticatable
         $this->phone_verify_token = null;
         $this->phone_verify_token_expire = null;
         $this->saveOrFail();
+    }
+
+    public function enablePhoneAuth(): void
+    {
+        $this->phone_auth = true;
+        $this->saveOrFail();
+    }
+
+    public function disablePhoneAuth(): void
+    {
+        $this->phone_auth = false;
+        $this->saveOrFail();
+    }
+
+    public function isPhoneAuthEnabled(): bool
+    {
+        return $this->phone_auth;
     }
 }

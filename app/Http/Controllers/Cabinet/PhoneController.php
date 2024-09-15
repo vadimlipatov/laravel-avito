@@ -12,7 +12,8 @@ class PhoneController extends Controller
 {
     private $sms;
 
-    public function __construct(SmsSender $sms){
+    public function __construct(SmsSender $sms)
+    {
         $this->sms = $sms;
     }
 
@@ -49,6 +50,19 @@ class PhoneController extends Controller
             $user->verifyPhone($request['token'], Carbon::now());
         } catch (\DomainException $e) {
             return redirect()->route('cabinet.profile.phone')->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('cabinet.profile.home');
+    }
+
+    public function auth()
+    {
+        $user = Auth::user();
+
+        if ($user->isPhoneAuthEnabled()) {
+            $user->disablePhoneAuth();
+        } else {
+            $user->enablePhoneAuth();
         }
 
         return redirect()->route('cabinet.profile.home');
