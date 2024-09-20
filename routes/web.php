@@ -7,6 +7,9 @@ Route::get('/', 'HomeController@index')->name('home');
 Auth::routes();
 Route::get('/verify/{token}', 'Auth\RegisterController@verify')->name('register.verify');
 
+// Ajax
+Route::get('/ajax/regions', 'Ajax\RegionController@get')->name('ajax.regions');
+
 // Cabinet
 Route::group(
 	[

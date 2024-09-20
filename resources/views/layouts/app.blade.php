@@ -94,9 +94,6 @@
 
   <!-- Scripts -->
   <script src="{{ mix('js/app.js', 'build') }}" defer></script>
-  <script>
-    $('#flash-overlay-modal').modal();
-  </script>
 </body>
 
 </html>
