@@ -22,4 +22,10 @@ class Region extends Model
     {
         return $this->hasMany(static::class, 'parent_id', 'id');
     }
+
+
+    public function getAddress()
+    {
+        return ($this->parent ? $this->parent->getAddress() . ', ' : '') . $this->name;
+    }
 }

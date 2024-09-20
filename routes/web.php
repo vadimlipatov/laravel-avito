@@ -39,6 +39,7 @@ Route::group(
 		);
 
 		Route::resource('adverts', 'Adverts\AdvertController');
+		Route::get('adverts/create/region/{category}', 'Adverts\AdvertController')->name('adverts.create.region');
 	}
 );
 
