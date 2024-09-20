@@ -14,6 +14,9 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property Category $parent
  * @property Category[] $children
  * @property int $depth
+ * @property array $allAttributes
+ * @property array $attributes
+ * @property array $parentAttributes
  */
 class Category extends Model
 {

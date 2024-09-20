@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Cabinet\Adverts;
 
+use AdvertService;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class CreateController extends Controller
 {
-    public function __construct()
+    private $service;
+
+    public function __construct(AdvertService $service)
     {
         $this->middleware('filled_profile');
+        $this->service = $service;
     }
 
     public function category()
@@ -30,5 +35,21 @@ class CreateController extends Controller
     public function advert(Category $category, Region $region = null)
     {
         return view('cabinet.adverts.create.advert', compact('category', 'region'));
+    }
+
+    public function store(CreateRequest $request, Category $category, Region $region = null)
+    {
+        try {
+            $advert = $this->service->create(
+                Auth::id(),
+                $category->id,
+                $region ? $region->id : null,
+                $request
+            );
+        } catch (\Throwable $th) {
+            return back()->withError('error', $th->getMessage());
+        }
+
+        return redirect()->route('adverts.show', $advert);
     }
 }
