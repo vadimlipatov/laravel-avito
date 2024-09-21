@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Cabinet\Adverts;
-
-use Illuminate\Validation\Rule;
+namespace App\Http\Requests\Adverts;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class CreateRequest extends FormRequest
+class AttributesRequest extends FormRequest
 {
     public function authorize()
     {
@@ -17,7 +16,7 @@ class CreateRequest extends FormRequest
     {
         $items = [];
 
-        foreach ($this->category->allAttributes() as $attribute) {
+        foreach ($this->advert->category->allAttributes() as $attribute) {
             $rules = [
                 $attribute->required ? 'required' : 'nullable',
             ];
@@ -35,11 +34,6 @@ class CreateRequest extends FormRequest
             $items['attribute.' . $attribute->id . '.value'] = $rules;
         }
 
-        return array_merge([
-            'title' => 'required|string',
-            'content' => 'required|string',
-            'price' => 'required|integer',
-            'address' => 'required|string',
-        ], $items);
+        return $items;
     }
 }

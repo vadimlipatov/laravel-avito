@@ -4,7 +4,11 @@ use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Entity\User;
+use App\Http\Requests\Adverts\AttributesRequest;
+use App\Http\Requests\Adverts\PhotosRequest;
+use App\Http\Requests\Adverts\RejectRequest;
 use App\Http\Requests\Cabinet\Adverts\CreateRequest;
+use Carbon\Carbon;
 
 class AdvertService
 {
@@ -43,7 +47,8 @@ class AdvertService
         });
     }
 
-    public function addPhotos($id, PhotosRequest $request){
+    public function addPhotos($id, PhotosRequest $request)
+    {
         $advert =  $this->getAdvert($id);
 
         DB::transaction(function () use ($advert, $request) {
@@ -53,5 +58,53 @@ class AdvertService
                 ]);
             }
         });
+    }
+
+    public function getAdvert($id): Advert
+    {
+        return Advert::findOrFail($id);
+    }
+
+    public function sendToModeration($id)
+    {
+        $advert = $this->getAdvert($id);
+        $advert->sendToModeration();
+    }
+
+    public function moderate($id)
+    {
+        $advert = $this->getAdvert($id);
+        $advert->moderate(Carbon::now());
+    }
+
+    public function reject($id, RejectRequest $request)
+    {
+        $advert = $this->getAdvert($id);
+        $advert->reject($request['reason']);
+    }
+
+    public function editAttributes($id, AttributesRequest $request)
+    {
+        $advert = $this->getAdvert($id);
+
+        DB::transaction(function () use ($advert, $request) {
+            $advert->values()->delete();
+
+            foreach ($request->category->allAttributes() as $attribute) {
+                $value = $request['attributes'][$attribute->id] ?? null;
+                if (!empty($value)) {
+                    $advert->values()->create([
+                        'attribute_id' => $attribute->id,
+                        'value' => $value
+                    ]);
+                }
+            }
+        });
+    }
+
+    public function remove($id)
+    {
+        $advert = $this->getAdvert($id);
+        $advert->delete();
     }
 }

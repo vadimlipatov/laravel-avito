@@ -5,15 +5,16 @@ namespace App\Entity\Adverts\Advert;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Entity\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int $id
- * @property int $category_id
- * @property int $region_id
+ * @property int    $id
+ * @property int    $category_id
+ * @property int    $region_id
+ * @property int    $price
  * @property string $title
  * @property string $content
- * @property int $price
  * @property string $address
  * @property string $status
  * @property string $reject_reason
@@ -21,6 +22,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $published_at
  * @property string $expires_at
+ *
+ * @property Category $category
+ * @property Value[] $values
+ *
+ * @method static Builder forUser(User $user)
  */
 class Advert extends Model
 {
@@ -58,6 +64,11 @@ class Advert extends Model
         return $this->status === self::STATUS_ACTIVE;
     }
 
+    public function isOnModeration()
+    {
+        return $this->status === self::STATUS_MODERATION;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -81,5 +92,43 @@ class Advert extends Model
     public function photos()
     {
         return $this->hasMany(Photo::class, 'advert_id', 'id');
+    }
+
+    public function sendToModeration()
+    {
+        if (!$this->isDraft()) {
+            throw new \DomainException('Advert is not a draft.');
+        }
+
+        if (!$this->photos()->count()) {
+            throw new \DomainException('Upload photos.');
+        }
+
+        $this->update(['status' => self::STATUS_MODERATION]);
+    }
+
+    public function moderate(Carbon $date)
+    {
+        if ($this->isOnModeration()) {
+            throw new \DomainException('Advert is not sent to moderation.');
+        }
+
+        $this->update([
+            'status' => self::STATUS_ACTIVE,
+            'published_at' => $date,
+            'expires_at' => $date->copy()->addDays(15),
+        ]);
+    }
+
+    public function reject($reason)
+    {
+        $this->update([
+            'status' => self::STATUS_DRAFT,
+            'reject_reason' => $reason,
+        ]);
+    }
+
+    public function scopeForUser($query, User $user){
+        return $query->where('user_id', $user->id);
     }
 }
