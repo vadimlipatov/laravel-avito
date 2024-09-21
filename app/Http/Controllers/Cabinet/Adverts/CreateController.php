@@ -6,6 +6,7 @@ use AdvertService;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cabinet\Adverts\CreateRequest;
 use Auth;
 
 class CreateController extends Controller
@@ -47,7 +48,7 @@ class CreateController extends Controller
                 $request
             );
         } catch (\Throwable $th) {
-            return back()->withError('error', $th->getMessage());
+            return back()->with('error', $th->getMessage());
         }
 
         return redirect()->route('adverts.show', $advert);

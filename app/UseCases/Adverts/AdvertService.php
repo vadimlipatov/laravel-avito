@@ -42,4 +42,16 @@ class AdvertService
             return $advert;
         });
     }
+
+    public function addPhotos($id, PhotosRequest $request){
+        $advert =  $this->getAdvert($id);
+
+        DB::transaction(function () use ($advert, $request) {
+            foreach ($request['files'] as $file) {
+                $advert->photos()->create([
+                    'file' => $file->store('adverts')
+                ]);
+            }
+        });
+    }
 }
