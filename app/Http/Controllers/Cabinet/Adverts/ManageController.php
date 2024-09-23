@@ -16,15 +16,47 @@ class ManageController extends Controller
 
     public function __construct(AdvertService $service)
     {
-        $this->middleware(FilledProfile::class);
         $this->service = $service;
     }
 
-    public function attributes(Advert $advert)
+    public function editForm(Advert $advert)
     {
         $this->checkAccess($advert);
 
-        return view('adverts.edit.attributes', compact('advert'));
+        return view('adverts.edit.advert', compact('advert'));
+    }
+
+    public function edit(EditRequest $request, Advert $advert)
+    {
+        $this->checkAccess($advert);
+
+        try {
+            $this->service->edit($advert->id, $request);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('adverts.show',  $advert);
+    }
+
+    public function attributes(AttributesRequest $request, Advert $advert)
+    {
+        $this->checkAccess($advert);
+
+        try {
+            $this->service->editAttributes($advert->id, $request);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('adverts.show',  $advert);
+    }
+
+    public function photosForm(Advert $advert)
+    {
+        $this->checkAccess($advert);
+
+        return view('adverts.edit.photos', compact('advert'));
     }
 
     public function updateAttributes(AttributesRequest $request, Advert $advert)
@@ -40,11 +72,43 @@ class ManageController extends Controller
         return redirect()->route('adverts.show',  $advert);
     }
 
-    public function photos(Advert $advert)
+    public function photos(PhotosRequest $request, Advert $advert)
     {
         $this->checkAccess($advert);
 
-        return view('adverts.edit.photos', compact('advert'));
+        try {
+            $this->service->addPhotos($advert->id, $request);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('adverts.show',  $advert);
+    }
+
+    public function send(Advert $advert)
+    {
+        $this->checkAccess($advert);
+
+        try {
+            $this->service->sendToModeration($advert->id);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('adverts.show',  $advert);
+    }
+
+    public function close(Advert $advert)
+    {
+        $this->checkAccess($advert);
+
+        try {
+            $this->service->close($advert->id);
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('adverts.show',  $advert);
     }
 
     public function updatePhotos(PhotosRequest $request, Advert $advert)

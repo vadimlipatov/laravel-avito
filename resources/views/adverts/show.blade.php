@@ -45,6 +45,26 @@
     </div>
   @endcan
 
+  @can('manage-own-advert', $advert)
+    <div class="d-flex flex-row mb-3">
+      <a href="{{ route('cabinet.adverts.edit', $advert) }}" class="btn btn-primary mr-1">Edit</a>
+      <a href="{{ route('cabinet.adverts.photos', $advert) }}" class="btn btn-primary mr-1">Photos</a>
+
+      @if ($advert->isDraft())
+        <form method="POST" action="{{ route('cabinet.adverts.send', $advert) }}" class="mr-1">
+          @csrf
+          <button type="submit" class="btn btn-success">Publish</button>
+        </form>
+      @endif
+
+      <form method="POST" action="{{ route('cabinet.adverts.destroy', $advert) }}" class="mr-1">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  @endcan
+
   <div class="row">
     <div class="col-md-9">
 

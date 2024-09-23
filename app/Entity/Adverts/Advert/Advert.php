@@ -31,6 +31,8 @@ use Illuminate\Database\Query\Builder;
  * @method static Builder forUser(User $user)
  * @method static Builder forCategory(Category $category)
  * @method static Builder forRegion(Region $region)
+ * @method static Builder active()
+ * @method expire()
  */
 class Advert extends Model
 {
@@ -38,6 +40,7 @@ class Advert extends Model
     public const STATUS_MODERATION = 'moderation';
     public const STATUS_ACTIVE = 'active';
     public const STATUS_CLOSED = 'closed';
+    public const STATUS_EXPIRED = 'expired';
 
     protected $table = 'advert_adverts';
 
@@ -119,7 +122,9 @@ class Advert extends Model
             throw new \DomainException('Upload photos.');
         }
 
-        $this->update(['status' => self::STATUS_MODERATION]);
+        $this->update([
+            'status' => self::STATUS_MODERATION
+        ]);
     }
 
     public function moderate(Carbon $date)
@@ -143,6 +148,20 @@ class Advert extends Model
         ]);
     }
 
+    public function expire()
+    {
+        $this->update([
+            'status' => self::STATUS_EXPIRED,
+        ]);
+    }
+
+    public function close()
+    {
+        $this->update([
+            'status' => self::STATUS_CLOSED,
+        ]);
+    }
+
     public function scopeForUser($query, User $user)
     {
         return $query->where('user_id', $user->id);
@@ -150,7 +169,7 @@ class Advert extends Model
 
     public function scopeForCategory($query, Category $category)
     {
-        return $query->where('category_id', array_merge(
+        return $query->whereIn('category_id', array_merge(
             [$category->id],
             $category->descendants()->pluck('id')->toArray() // children
         ));
@@ -163,7 +182,7 @@ class Advert extends Model
         while ($childrenIds = Region::where(['parent_id', $childrenIds])->pluck('id')->toArray()) {
             $ids =  array_merge($ids, $childrenIds);
         }
-        return $query->where('parent_id', $ids);
+        return $query->whereIn('parent_id', $ids);
     }
 
     public function scopeActive($query)

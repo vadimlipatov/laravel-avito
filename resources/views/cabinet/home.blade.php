@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-@section('content')
   <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
       <a href="{{ route('cabinet.home') }}" class="nav-link active">Dashboard</a>
@@ -13,5 +12,4 @@
       <a href="{{ route('cabinet.profile.home') }}" class="nav-link">Profile</a>
     </li>
   </ul>
-@endsection
 @endsection

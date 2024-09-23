@@ -6,16 +6,15 @@ use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
-use Auth;
 use Gate;
 
 class AdvertController extends Controller
 {
     public function index(Region $region = null, Category $category = null)
     {
-        $query = Advert::active()->with(['category', 'region'])->orderByDesc('id');
+        $query = Advert::active()->with(['category', 'region'])->orderByDesc('published_at');
 
-        if ($region) {
+        if ($category) {
             $query->forCategory($category);
         }
 
@@ -28,8 +27,8 @@ class AdvertController extends Controller
             : Region::roots()->orderBy('name')->getModels();
 
         $categories = $category
-            ? $category->children()->defaultOder()->getModels()
-            : Category::whereIsRoot()->defaultOder()->getModels();
+            ? $category->children()->defaultOrder()->getModels()
+            : Category::whereIsRoot()->defaultOrder()->getModels();
 
         $adverts = $query->paginate(20);
 

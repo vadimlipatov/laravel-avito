@@ -60,11 +60,6 @@ class AdvertService
         });
     }
 
-    public function getAdvert($id): Advert
-    {
-        return Advert::findOrFail($id);
-    }
-
     public function sendToModeration($id)
     {
         $advert = $this->getAdvert($id);
@@ -106,5 +101,34 @@ class AdvertService
     {
         $advert = $this->getAdvert($id);
         $advert->delete();
+    }
+
+    public function expire($id)
+    {
+        $advert = $this->getAdvert($id);
+        $advert->expire();
+    }
+
+    public function edit($id, EditRequest $request)
+    {
+        $advert = $this->getAdvert($id);
+
+        $advert->update([
+            'title' => $request['title'],
+            'content' => $request['content'],
+            'price' => $request['price'],
+            'address' => $request['address'],
+        ]);
+    }
+
+    public function getAdvert($id): Advert
+    {
+        return Advert::findOrFail($id);
+    }
+
+    public function close($id)
+    {
+        $advert = $this->getAdvert($id);
+        $advert->close();
     }
 }

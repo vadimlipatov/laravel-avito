@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\RemoveComments::class,
+        \App\Console\Commands\Advert\ExpireCommand::class,
         \App\Console\Commands\User\CreateAdmin::class,
         \App\Console\Commands\User\VerifyCommand::class,
         \App\Console\Commands\User\RoleCommand::class,
@@ -27,8 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command('advert:expire')->hourly();
     }
 
     /**
@@ -38,7 +37,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
