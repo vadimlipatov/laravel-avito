@@ -4,7 +4,7 @@
 
 @section('content')
 
-  <p><a href="{{ route('cabinet.adverts.create') }}" class="btn btn-success">Add advert</a></p>
+  <p><a href="{{ route('cabinet.adverts.create') }}" class="btn btn-success">Add Advert</a></p>
 
   <div class="card card-default mb-3">
     <div class="card-header">
@@ -16,7 +16,7 @@
           <div class="col-md-3">
             <ul class="list-unstyled">
               @foreach ($chunk as $current)
-                <li><a href="{{ route('adverts.index', [null, $current]) }}">{{ $current->name }}</a></li>
+                <li><a href="{{ route('adverts.index.all', $current) }}">{{ $current->name }}</a></li>
               @endforeach
             </ul>
           </div>

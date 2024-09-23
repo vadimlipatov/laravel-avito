@@ -7,6 +7,7 @@ use App\Entity\Region;
 use App\Entity\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 /**
  * @property int    $id
@@ -23,10 +24,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $published_at
  * @property string $expires_at
  *
+ * @property User $user
  * @property Category $category
  * @property Value[] $values
  *
  * @method static Builder forUser(User $user)
+ * @method static Builder forCategory(Category $category)
+ * @method static Builder forRegion(Region $region)
  */
 class Advert extends Model
 {
@@ -94,6 +98,17 @@ class Advert extends Model
         return $this->hasMany(Photo::class, 'advert_id', 'id');
     }
 
+    public function getValue($id)
+    {
+        foreach ($this->values as $value) {
+            if ($value->attribute_id == $id) {
+                return $value->value;
+            }
+        }
+
+        return null;
+    }
+
     public function sendToModeration()
     {
         if (!$this->isDraft()) {
@@ -128,7 +143,31 @@ class Advert extends Model
         ]);
     }
 
-    public function scopeForUser($query, User $user){
+    public function scopeForUser($query, User $user)
+    {
         return $query->where('user_id', $user->id);
+    }
+
+    public function scopeForCategory($query, Category $category)
+    {
+        return $query->where('category_id', array_merge(
+            [$category->id],
+            $category->descendants()->pluck('id')->toArray() // children
+        ));
+    }
+
+    public function scopeForRegion($query, Region $region)
+    {
+        $ids = [$region->id];
+        $childrenIds = $ids;
+        while ($childrenIds = Region::where(['parent_id', $childrenIds])->pluck('id')->toArray()) {
+            $ids =  array_merge($ids, $childrenIds);
+        }
+        return $query->where('parent_id', $ids);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
     }
 }

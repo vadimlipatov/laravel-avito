@@ -4,8 +4,18 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-const { default: Axios } = require("axios");
-
 require("./bootstrap");
 
 $("#flash-overlay-modal").modal();
+
+$(document).on("click", ".phone-button", function () {
+	const button = $(this);
+	axios
+		.post(button.data("source"))
+		.then(function (response) {
+			button.find(".number").html(response.data);
+		})
+		.catch(function (error) {
+			console.log(error);
+		});
+});

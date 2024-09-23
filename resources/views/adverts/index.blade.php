@@ -53,6 +53,35 @@
     </div>
   @endif
 
+  <div class="row">
+    <div class="col-md-9">
 
+      <div class="adverts-list">
+        @foreach ($adverts as $advert)
+          <div class="advert">
+            <div class="row">
+              <div class="col-md-3">
+                <div style="height: 180px; background: #f6f6f6; border: 1px solid #ddd"></div>
+              </div>
+              <div class="col-md-9">
+                <span class="float-right">{{ $advert->price }}</span>
+                <div class="h4"><a href="{{ route('adverts.show', $advert) }}">{{ $advert->title }}</a></div>
+                <p>Category: <a href="">{{ $advert->category->name }}</a></p>
+                <p>Date: {{ $advert->created_at }}</p>
+                <div>{{ Str::limit($advert->content, 200) }}</div>
+              </div>
+            </div>
+          </div>
+      </div>
+      @endforeach
+    </div>
+
+    {{ $adverts->links() }}
+
+    <div class="col-md-3">
+      <div style="height: 400px; background: #f6f6f6; border: 1px solid #ddd; margin-bottom: 20px"></div>
+      <div style="height: 200px; background: #f6f6f6; border: 1px solid #ddd; margin-bottom: 20px"></div>
+    </div>
+  </div>
 
 @endsection
