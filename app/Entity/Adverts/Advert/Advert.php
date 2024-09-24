@@ -163,6 +163,11 @@ class Advert extends Model
         ]);
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+
     public function scopeForUser($query, User $user)
     {
         return $query->where('user_id', $user->id);
@@ -184,10 +189,5 @@ class Advert extends Model
             $ids =  array_merge($ids, $childrenIds);
         }
         return $query->whereIn('parent_id', $ids);
-    }
-
-    public function scopeActive($query)
-    {
-        return $query->where('status', self::STATUS_ACTIVE);
     }
 }

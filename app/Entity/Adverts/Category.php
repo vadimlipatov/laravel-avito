@@ -28,9 +28,8 @@ class Category extends Model
 
     protected $fillable = ['name', 'slug', 'parent_id'];
 
-    public function attributes()
-    {
-        return $this->hasMany(Attribute::class, 'category_id', 'id');
+    public function getPath(){
+        return implode('/', array_merge($this->ancestors()->defaultOrder()->pluck('slug')->toArray(), [$this->slug]));
     }
 
     public function parentAttributes()
@@ -43,5 +42,10 @@ class Category extends Model
         $parent = $this->parentAttributes();
         $owm = $this->attributes()->orderBy('sort')->getModels();
         return array_merge($parent, $owm);
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany(Attribute::class, 'category_id', 'id');
     }
 }

@@ -16,10 +16,12 @@ Route::group([
 	'namespace' => 'Adverts'
 ], function () {
 	Route::get('/show/{advert}', 'AdvertController@show')->name('show');
-	Route::get('/show/{advert}/phone', 'AdvertController@phone')->name('phone');
+	Route::post('/show/{advert}/phone', 'AdvertController@phone')->name('phone');
 
 	Route::get('/all/{category?}', 'AdvertController@all')->name('index.all');
 	Route::get('/{region?}/{category?}', 'AdvertController@index')->name('index');
+
+	Route::get('/{advert_path?}', 'AdvertController@index')->name('index');
 });
 
 // Cabinet
@@ -58,17 +60,20 @@ Route::group(
 			'middleware' => FilledProfile::class
 		], function () {
 			Route::get('/', 'AdvertController@index')->name('index');
-			Route::get('/create', 'CreateController@create')->name('create');
-			Route::get('/create/region/{category}/{region?}', 'CreateController@region')->name('create.region');
-			Route::get('/create/advert/{category}/{region?}', 'CreateController@advert')->name('create.advert');
-			Route::post('/create/advert/{category}/{region?}', 'CreateController@store')->name('create.advert.store');
+            Route::get('/create', 'CreateController@category')->name('create');
+            Route::get('/create/region/{category}/{region?}', 'CreateController@region')->name('create.region');
+            Route::get('/create/advert/{category}/{region?}', 'CreateController@advert')->name('create.advert');
+            Route::post('/create/advert/{category}/{region?}', 'CreateController@store')->name('create.advert.store');
 
-			Route::get('{advert}/edit', 'ManageController@edit')->name('edit');
-			Route::put('{advert}/edit', 'ManageController@update')->name('update');
-			Route::get('{advert}/photos', 'ManageController@photos')->name('photos');
-			Route::post('{advert}/photos', 'ManageController@photos');
-			Route::post('{advert}/send', 'ManageController@send')->name('send');
-			Route::delete('{advert}/destroy', 'ManageController@destroy')->name('destroy');
+            Route::get('/{advert}/edit', 'ManageController@editForm')->name('edit');
+            Route::put('/{advert}/edit', 'ManageController@edit');
+            Route::get('/{advert}/photos', 'ManageController@photosForm')->name('photos');
+            Route::post('/{advert}/photos', 'ManageController@photos');
+            Route::get('/{advert}/attributes', 'ManageController@attributesForm')->name('attributes');
+            Route::post('/{advert}/attributes', 'ManageController@attributes');
+            Route::post('/{advert}/send', 'ManageController@send')->name('send');
+            Route::post('/{advert}/close', 'ManageController@close')->name('close');
+            Route::delete('/{advert}/destroy', 'ManageController@destroy')->name('destroy');
 		});
 	}
 
@@ -108,6 +113,21 @@ Route::group(
 
 						// Attributes
 						Route::resource('attributes', 'AttributeController')->except('index');
+
+						// Adverts
+						Route::group(['prefix' => 'adverts', 'as' => 'adverts.'], function () {
+							Route::get('/', 'AdvertController@index')->name('index');
+							Route::get('/{advert}/edit', 'AdvertController@editForm')->name('edit');
+							Route::put('/{advert}/edit', 'AdvertController@edit');
+							Route::get('/{advert}/photos', 'AdvertController@photosForm')->name('photos');
+							Route::post('/{advert}/photos', 'AdvertController@photos');
+							Route::get('/{advert}/attributes', 'AdvertController@attributesForm')->name('attributes');
+							Route::post('/{advert}/attributes', 'AdvertController@attributes');
+							Route::post('/{advert}/moderate', 'AdvertController@moderate')->name('moderate');
+							Route::get('/{advert}/reject', 'AdvertController@rejectForm')->name('reject');
+							Route::post('/{advert}/reject', 'AdvertController@reject');
+							Route::delete('/{advert}/destroy', 'AdvertController@destroy')->name('destroy');
+						});
 					}
 				);
 			}
