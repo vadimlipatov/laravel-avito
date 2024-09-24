@@ -20,6 +20,8 @@ use Illuminate\Support\Str;
  * @property string $phone_verify_token
  * @property Carbon $phone_verify_token_expire
  * @property string $status
+ *
+ * @method static rolesList()
  */
 class User extends Authenticatable
 {

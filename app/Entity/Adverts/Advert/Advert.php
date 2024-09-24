@@ -33,6 +33,7 @@ use Illuminate\Database\Query\Builder;
  * @method static Builder forRegion(Region $region)
  * @method static Builder active()
  * @method expire()
+ * @method static statusesList()
  */
 class Advert extends Model
 {
@@ -51,7 +52,7 @@ class Advert extends Model
         'expires_at' => 'datetime',
     ];
 
-    public function statusList()
+    public static function statusesList()
     {
         return [
             self::STATUS_DRAFT => 'Draft',
