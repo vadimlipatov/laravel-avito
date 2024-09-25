@@ -6,7 +6,7 @@ use App\Entity\Region;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RegionsController extends Controller
+class RegionController extends Controller
 {
 
     public function index(Request $request)
@@ -43,7 +43,7 @@ class RegionsController extends Controller
             ]
         );
 
-        return redirect()->route('admin.regions.show', $request['parent']);
+        return redirect()->route('admin.regions.show', $region);
     }
 
     public function show(Region $region)

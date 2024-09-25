@@ -58,6 +58,7 @@ class AdvertService
                     'file' => $file->store('adverts')
                 ]);
             }
+            $advert->update(); // add timestamps
         });
     }
 
@@ -85,7 +86,6 @@ class AdvertService
 
         DB::transaction(function () use ($advert, $request) {
             $advert->values()->delete();
-
             foreach ($request->category->allAttributes() as $attribute) {
                 $value = $request['attributes'][$attribute->id] ?? null;
                 if (!empty($value)) {
@@ -95,6 +95,7 @@ class AdvertService
                     ]);
                 }
             }
+            $advert->update(); // add timestamps
         });
     }
 

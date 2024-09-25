@@ -13,18 +13,13 @@ class AdvertController extends Controller
 {
     public function index(AdvertsPath $path)
     {
-
-        $region = $path->region;
-
-        $category = $path->category;
-
         $query = Advert::active()->with(['category', 'region'])->orderByDesc('published_at');
 
-        if ($category) {
+        if ($category = $path->category) {
             $query->forCategory($category);
         }
 
-        if ($region) {
+        if ($region = $path->region) {
             $region->forRegion($region);
         }
 
