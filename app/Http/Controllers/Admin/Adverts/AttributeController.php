@@ -6,10 +6,14 @@ use App\Entity\Adverts\Attribute;
 use App\Entity\Adverts\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Adverts\AttributeRequest;
-use Illuminate\Http\Request;
 
 class AttributeController extends Controller
 {
+	public function __construct()
+	{
+		$this->middleware('can:manage-adverts-categories');
+	}
+
 	public function create(Category $category)
 	{
 		$types = Attribute::typesList();

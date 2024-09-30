@@ -9,6 +9,9 @@
       <a class="nav-link" href="{{ route('cabinet.adverts.index') }}">Adverts</a>
     </li>
     <li class="nav-item">
+      <a href="{{ route('cabinet.favorites.index') }}" class="nav-link">Favorites</a>
+    </li>
+    <li class="nav-item">
       <a href="{{ route('cabinet.profile.home') }}" class="nav-link">Profile</a>
     </li>
   </ul>

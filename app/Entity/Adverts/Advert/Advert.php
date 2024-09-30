@@ -163,6 +163,11 @@ class Advert extends Model
         ]);
     }
 
+    public function favorites()
+    {
+        return $this->belongsToMany(User::class, 'advert_favorites', 'advert_id', 'user_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->where('status', self::STATUS_ACTIVE);
@@ -189,5 +194,12 @@ class Advert extends Model
             $ids =  array_merge($ids, $childrenIds);
         }
         return $query->whereIn('parent_id', $ids);
+    }
+
+    public function scopeFavoredByUser($query, User $user)
+    {
+        return $query->whereHas('favorites', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        });
     }
 }

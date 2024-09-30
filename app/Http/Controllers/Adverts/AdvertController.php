@@ -11,6 +11,11 @@ use Gate;
 
 class AdvertController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:manage-users');
+    }
+
     public function index(AdvertsPath $path)
     {
         $query = Advert::active()->with(['category', 'region'])->orderByDesc('published_at');

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Adverts;
 
-use AdvertService;
 use App\Entity\Adverts\Advert\Advert;
 use App\Entity\User;
 use App\Http\Controllers\Controller;
@@ -10,6 +9,7 @@ use App\Http\Requests\Adverts\AttributesRequest;
 use App\Http\Requests\Adverts\EditRequest;
 use App\Http\Requests\Adverts\PhotosRequest;
 use App\Http\Requests\Adverts\RejectRequest;
+use App\UseCases\Adverts\AdvertService;
 use Request;
 
 class AdvertController extends Controller
@@ -19,6 +19,7 @@ class AdvertController extends Controller
     public function __construct(AdvertService $service)
     {
         $this->service = $service;
+        $this->middleware('can:manage-adverts');
     }
 
     public function index(Request $request)

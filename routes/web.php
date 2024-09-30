@@ -53,6 +53,9 @@ Route::group(
 			}
 		);
 
+		Route::get('favorites', 'FavoriteController@index')->name('favorites.index');
+		Route::delete('favorites/{advert}', 'FavoriteController@remove')->name('favorites.remove');
+
 		Route::group([
 			'prefix' => 'adverts',
 			'as' => 'adverts.',
@@ -60,20 +63,20 @@ Route::group(
 			'middleware' => FilledProfile::class
 		], function () {
 			Route::get('/', 'AdvertController@index')->name('index');
-            Route::get('/create', 'CreateController@category')->name('create');
-            Route::get('/create/region/{category}/{region?}', 'CreateController@region')->name('create.region');
-            Route::get('/create/advert/{category}/{region?}', 'CreateController@advert')->name('create.advert');
-            Route::post('/create/advert/{category}/{region?}', 'CreateController@store')->name('create.advert.store');
+			Route::get('/create', 'CreateController@category')->name('create');
+			Route::get('/create/region/{category}/{region?}', 'CreateController@region')->name('create.region');
+			Route::get('/create/advert/{category}/{region?}', 'CreateController@advert')->name('create.advert');
+			Route::post('/create/advert/{category}/{region?}', 'CreateController@store')->name('create.advert.store');
 
-            Route::get('/{advert}/edit', 'ManageController@editForm')->name('edit');
-            Route::put('/{advert}/edit', 'ManageController@edit');
-            Route::get('/{advert}/photos', 'ManageController@photosForm')->name('photos');
-            Route::post('/{advert}/photos', 'ManageController@photos');
-            Route::get('/{advert}/attributes', 'ManageController@attributesForm')->name('attributes');
-            Route::post('/{advert}/attributes', 'ManageController@attributes');
-            Route::post('/{advert}/send', 'ManageController@send')->name('send');
-            Route::post('/{advert}/close', 'ManageController@close')->name('close');
-            Route::delete('/{advert}/destroy', 'ManageController@destroy')->name('destroy');
+			Route::get('/{advert}/edit', 'ManageController@editForm')->name('edit');
+			Route::put('/{advert}/edit', 'ManageController@edit');
+			Route::get('/{advert}/photos', 'ManageController@photosForm')->name('photos');
+			Route::post('/{advert}/photos', 'ManageController@photos');
+			Route::get('/{advert}/attributes', 'ManageController@attributesForm')->name('attributes');
+			Route::post('/{advert}/attributes', 'ManageController@attributes');
+			Route::post('/{advert}/send', 'ManageController@send')->name('send');
+			Route::post('/{advert}/close', 'ManageController@close')->name('close');
+			Route::delete('/{advert}/destroy', 'ManageController@destroy')->name('destroy');
 		});
 	}
 

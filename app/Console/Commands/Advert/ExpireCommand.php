@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Advert;
 
-use AdvertService;
 use App\Entity\Adverts\Advert\Advert;
+use App\UseCases\Adverts\AdvertService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class RegionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:manage-regions');
+    }
 
     public function index(Request $request)
     {

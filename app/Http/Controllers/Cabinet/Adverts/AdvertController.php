@@ -12,6 +12,7 @@ class AdvertController extends Controller
     public function __construct()
     {
         $this->middleware(FilledProfile::class);
+        $this->middleware('can:manage-adverts');
     }
 
     public function index()

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Cabinet\Adverts;
 
-use AdvertService;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\FilledProfile;
 use App\Http\Requests\Cabinet\Adverts\CreateRequest;
+use App\UseCases\Adverts\AdvertService;
 use Auth;
 
 class CreateController extends Controller
@@ -15,7 +16,7 @@ class CreateController extends Controller
 
     public function __construct(AdvertService $service)
     {
-        $this->middleware('filled_profile');
+        $this->middleware(FilledProfile::class);
         $this->service = $service;
     }
 
@@ -47,8 +48,8 @@ class CreateController extends Controller
                 $region ? $region->id : null,
                 $request
             );
-        } catch (\Throwable $th) {
-            return back()->with('error', $th->getMessage());
+        } catch (\DomainException $e) {
+            return back()->with('error', $e->getMessage());
         }
 
         return redirect()->route('adverts.show', $advert);
