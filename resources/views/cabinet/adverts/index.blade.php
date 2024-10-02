@@ -1,58 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-  <p><a href="{{ route('cabinet.adverts.create') }}" class="btn btn-success">Add Advert</a></p>
+  @include('cabinet.adverts._nav')
 
-  @if ($categories)
-    <div class="card card-default mb-3">
-      <div class="card-header">
-        @if ($category)
-          Categories of {{ $category->name }}
-        @else
-          Categories
-        @endif
-      </div>
-      <div class="card-body pb-8">
-        <div class="row">
-          @foreach (array_chunk($categories, 3) as $chunk)
-            <div class="col-md-3">
-              <ul class="list-unstyled">
-                @foreach ($chunk as $current)
-                  <li><a href="{{ route('adverts.index', [$region, $current]) }}">{{ $current->name }}</a></li>
-                @endforeach
-              </ul>
-            </div>
-          @endforeach
-        </div>
-      </div>
-    </div>
-  @endif
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Updated</th>
+        <th>Title</th>
+        <th>Region</th>
+        <th>Category</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
 
-  @if ($regions)
-    <div class="card card-default mb-3">
-      <div class="card-header">
-        @if ($category)
-          Regions of {{ $region->name }}
-        @else
-          Regions
-        @endif
-      </div>
-      <div class="card-body pb-8">
-        <div class="row">
-          @foreach (array_chunk($regions, 3) as $chunk)
-            <div class="col-md-3">
-              <ul class="list-unstyled">
-                @foreach ($chunk as $current)
-                  <li><a href="{{ route('adverts.index', [$region, $current]) }}">{{ $current->name }}</a></li>
-                @endforeach
-              </ul>
-            </div>
-          @endforeach
-        </div>
-      </div>
-    </div>
-  @endif
+      @foreach ($adverts as $advert)
+        <tr>
+          <td>{{ $advert->id }}</td>
+          <td>{{ $advert->updated_at }}</td>
+          <td><a href="{{ route('adverts.show', $advert) }}" target="_blank">{{ $advert->title }}</a></td>
+          <td>
+            @if ($advert->region)
+              {{ $advert->region->name }}
+            @endif
+          </td>
+          <td>{{ $advert->category->name }}</td>
+          <td>
+            @if ($advert->isDraft())
+              <span class="badge badge-secondary">Draft</span>
+            @elseif ($advert->isOnModeration())
+              <span class="badge badge-primary">Moderation</span>
+            @elseif ($advert->isActive())
+              <span class="badge badge-primary">Active</span>
+            @elseif ($advert->isClosed())
+              <span class="badge badge-secondary">Closed</span>
+            @endif
+          </td>
+        </tr>
+      @endforeach
 
+    </tbody>
+  </table>
 
-
+  {{ $adverts->links() }}
 @endsection
