@@ -25,7 +25,7 @@ class AdvertController extends Controller
         }
 
         if ($region = $path->region) {
-            $region->forRegion($region);
+            $query->forRegion($region);
         }
 
         $regions = $region

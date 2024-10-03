@@ -20,13 +20,13 @@ services:
         links:
             - mysql
             - redis
-#            - elasticsearch
+            - elasticsearch
         environment:
             - "DB_PORT=3306"
             - "DB_HOST=mysql"
             - "REDIS_PORT=6379"
             - "REDIS_HOST=redis"
-            # - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
+            - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
     php-cli:
         build:
             context: ./
@@ -36,13 +36,13 @@ services:
         links:
             - mysql
             - redis
-            # - elasticsearch
+            - elasticsearch
         environment:
             - "DB_PORT=3306"
             - "DB_HOST=mysql"
             - "REDIS_PORT=6379"
             - "REDIS_HOST=redis"
-            # - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
+            - "ELASTICSEARCH_HOSTS=elasticsearch:9200"
         tty: true
     mysql:
         image: mysql:5.7.16
@@ -66,7 +66,7 @@ services:
         working_dir: /var/www
         tty: true
     elasticsearch:
-#        image: elasticsearch:8.7.1
+        # image: elasticsearch:8.7.1
         image: linuxhub/elasticsearch:6.2.4
         environment:
             - bootstrap.memory_lock=true

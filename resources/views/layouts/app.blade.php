@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
   <meta charset="utf-8">
@@ -10,10 +10,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>Adverts</title>
-
-  <!-- Fonts -->
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+  @yield('meta')
 
   <!-- Styles -->
   <link href="{{ mix('css/app.css', 'build') }}" rel="stylesheet">
@@ -27,7 +24,7 @@
           Adverts
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -41,26 +38,20 @@
           <ul class="navbar-nav ml-auto">
             <!-- Authentication Links -->
             @guest
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-              </li>
+              <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+              <li><a class="nav-link" href="{{ route('register') }}">Register</a></li>
             @else
               <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{ Auth::user()->name }} <span class="caret"></span>
                 </a>
 
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="{{ route('admin.home') }}">Admin</a>
                   <a class="dropdown-item" href="{{ route('cabinet.home') }}">Cabinet</a>
-                  <a class="dropdown-item" href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-                                                 document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
+                  <a onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                    class="dropdown-item" href="{{ route('logout') }}">Logout
                   </a>
 
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -73,6 +64,10 @@
         </div>
       </div>
     </nav>
+
+    @section('search')
+      @include('layouts.partials.search', ['category' => null, 'route' => route('adverts.index')])
+    @show
   </header>
 
   <main class="app-content py-3">
@@ -87,13 +82,14 @@
   <footer>
     <div class="container">
       <div class="border-top pt-3">
-        <p class="text-center">&copy; {{ date('Y') }} - Adverts</p>
+        <p>&copy; {{ date('Y') }} - Adverts</p>
       </div>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <script src="{{ mix('js/app.js', 'build') }}" defer></script>
+  <script src="{{ mix('js/app.js', 'build') }}"></script>
+  @yield('scripts')
 </body>
 
 </html>
