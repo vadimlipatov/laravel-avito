@@ -1,10 +1,10 @@
-docker-up:
+docker-up: memory
 	docker-compose up -d
 
 docker-down:
 	docker-compose down
 
-docker-build:
+docker-build: memory
 	docker-compose up -d --build
 
 test:
@@ -34,3 +34,6 @@ admin:
 
 dump:
 	docker-compose exec php-cli php composer.phar dump-autoload
+
+memory:
+	sudo sysctl -w vm.max_map_count=262144
