@@ -21,8 +21,8 @@ use Illuminate\Database\Query\Builder;
  * @property string $reject_reason
  * @property string $created_at
  * @property string $updated_at
- * @property string $published_at
- * @property string $expires_at
+ * @property datetime $published_at
+ * @property datetime $expires_at
  *
  * @property User $user
  * @property Category $category
