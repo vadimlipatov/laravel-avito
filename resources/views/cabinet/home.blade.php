@@ -14,5 +14,6 @@
     <li class="nav-item">
       <a href="{{ route('cabinet.profile.home') }}" class="nav-link">Profile</a>
     </li>
+    <li class="nav-item"><a class="nav-link" href="{{ route('cabinet.banners.index') }}">Banners</a></li>
   </ul>
 @endsection
