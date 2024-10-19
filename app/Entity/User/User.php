@@ -4,6 +4,7 @@ namespace App\Entity\User;
 
 use App\Entity\Adverts\Advert\Advert;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
@@ -25,6 +26,7 @@ use Illuminate\Support\Str;
  *
  * @property Network[] networks
  *
+ * @method static Builder byNetwork(string $network, string $identity)
  */
 class User extends Authenticatable
 {
@@ -235,8 +237,15 @@ class User extends Authenticatable
         return $this->belongsToMany(Advert::class, 'advert_favorites', 'user_id', 'advert_id');
     }
 
-    public function findForPassport($identifier)
+    public function networks()
     {
-        return self::where('email', $identifier)->where('status', self::STATUS_ACTIVE)->first();
+        return $this->hasMany(Network::class, 'user_id', 'id');
+    }
+
+    public function scopeByNetwork(Builder $query, string $network, string $identity): Builder
+    {
+        return $query->whereHas('networks', function(Builder $query) use ($network, $identity) {
+            $query->where('network', $network)->where('identity', $identity);
+        });
     }
 }
