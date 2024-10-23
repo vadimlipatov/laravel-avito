@@ -5,12 +5,12 @@ namespace App\UseCases\Adverts;
 use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
-use App\Entity\User;
+use App\Entity\User\User;
 use App\Http\Requests\Adverts\AttributesRequest;
 use App\Http\Requests\Adverts\EditRequest;
 use App\Http\Requests\Adverts\PhotosRequest;
 use App\Http\Requests\Adverts\RejectRequest;
-use App\Http\Requests\Cabinet\Adverts\CreateRequest;
+use App\Http\Requests\Adverts\CreateRequest;
 use Carbon\Carbon;
 use DB;
 
