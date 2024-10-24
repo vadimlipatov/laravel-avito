@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
-use App\Entity\User\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Entity\User\User;
 use App\Services\Sms\SmsSender;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -37,7 +37,7 @@ class LoginController extends Controller
         }
 
         $authenticate = Auth::attempt(
-            $request->only('email', 'password'),
+            $request->only(['email', 'password']),
             $request->filled('remember')
         );
 
@@ -45,11 +45,10 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
             $user = Auth::user();
-            if ($user->status !== User::STATUS_ACTIVE) {
+            if ($user->isWait()) {
                 Auth::logout();
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }
-
             if ($user->isPhoneAuthEnabled()) {
                 Auth::logout();
                 $token = (string)random_int(10000, 99999);
@@ -61,27 +60,12 @@ class LoginController extends Controller
                 $this->sms->send($user->phone, 'Login code: ' . $token);
                 return redirect()->route('login.phone');
             }
-
             return redirect()->intended(route('cabinet.home'));
         }
-
-
 
         $this->incrementLoginAttempts($request);
 
         throw ValidationException::withMessages(['email' => [trans('auth.failed')]]);
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::guard()->logout();
-        $request->session()->invalidate();
-        return redirect()->route('home');
-    }
-
-    protected function username()
-    {
-        return 'email';
     }
 
     public function phone()
@@ -100,10 +84,11 @@ class LoginController extends Controller
             'token' => 'required|string',
         ]);
 
-        if (!$session = $request->session->get('auth')) {
+        if (!$session = $request->session()->get('auth')) {
             throw new BadRequestHttpException('Missing token info.');
         }
 
+        /** @var User $user */
         $user = User::findOrFail($session['id']);
 
         if ($request['token'] === $session['token']) {
@@ -116,5 +101,17 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         throw ValidationException::withMessages(['token' => ['Invalid auth token.']]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard()->logout();
+        $request->session()->invalidate();
+        return redirect()->route('home');
+    }
+
+    protected function username()
+    {
+        return 'email';
     }
 }

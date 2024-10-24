@@ -277,6 +277,23 @@
             },
             "type": "object"
         },
+        "RegisterRequest": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password_confirmation": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
         "ProfileEditRequest": {
             "properties": {
                 "name": {

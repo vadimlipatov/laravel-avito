@@ -2,7 +2,7 @@
 
 namespace App\Commands\User\Auth\Register;
 
-use App\Entity\User;
+use App\Entity\User\User;
 use App\Mail\Auth\VerifyMail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherInterface;

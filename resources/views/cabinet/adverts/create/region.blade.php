@@ -1,27 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-  @if ($region)
-    <p>
-      <a class="btn btn-success" href="{{ route('cabinet.adverts.create.advert', [$category, $region]) }}">
-        Add advert for {{ region->name }}
-      </a>
-    </p>
-  @else
-    <p>
-      <a class="btn btn-success" href="{{ route('cabinet.adverts.create.advert', [$category]) }}">
-        Add advert for all regions
-      </a>
-    </p>
-  @endif
+    @include('cabinet.adverts._nav')
 
-  <p>Or choose nested region:</p>
+    @if ($region)
+        <p>
+            <a href="{{ route('cabinet.adverts.create.advert', [$category, $region]) }}" class="btn btn-success">Add Advert for {{ $region->name }}</a>
+        </p>
+    @else
+        <p>
+            <a href="{{ route('cabinet.adverts.create.advert', [$category]) }}" class="btn btn-success">Add Advert for all regions</a>
+        </p>
+    @endif
 
-  <ul>
-    @foreach ($regions as $region)
-      <li>
-        <a href="{{ route('cabinet.adverts.create.region', [$category, $region]) }}">{{ $region->name }}</a>
-      </li>
-    @endforeach
-  </ul>
+    <p>Or choose nested region:</p>
+
+    <ul>
+        @foreach ($regions as $current)
+            <li>
+                <a href="{{ route('cabinet.adverts.create.region', [$category, $current]) }}">{{ $current->name }}</a>
+            </li>
+        @endforeach
+    </ul>
 @endsection

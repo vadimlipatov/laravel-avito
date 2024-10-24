@@ -18,7 +18,7 @@ class BannerController extends Controller
     {
         $this->service = $service;
     }
-
+    
     public function index()
     {
         $banners = Banner::forUser(Auth::user())->orderByDesc('id')->paginate(20);
@@ -104,8 +104,7 @@ class BannerController extends Controller
         $this->checkAccess($banner);
         try {
             $banner = $this->service->order($banner->id);
-            // $url = $this->robokassa->generateRedirectUrl($banner->id, $banner->cost, 'banner');
-            $url = "http://merchant.roboxchange.com/Index.aspx?"; // TODO
+            $url = $this->robokassa->generateRedirectUrl($banner->id, $banner->cost, 'banner');
             return redirect($url);
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());

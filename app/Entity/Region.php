@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @property string $id
+ * @property int $id
  * @property string $name
  * @property string $slug
  * @property int|null $parent_id
@@ -20,6 +20,16 @@ class Region extends Model
 {
     protected $fillable = ['name', 'slug', 'parent_id'];
 
+    public function getPath(): string
+    {
+        return ($this->parent ? $this->parent->getPath() . '/' : '') . $this->slug;
+    }
+
+    public function getAddress(): string
+    {
+        return ($this->parent ? $this->parent->getAddress() . ', ' : '') . $this->name;
+    }
+
     public function parent()
     {
         return $this->belongsTo(static::class, 'parent_id', 'id');
@@ -28,11 +38,6 @@ class Region extends Model
     public function children()
     {
         return $this->hasMany(static::class, 'parent_id', 'id');
-    }
-
-    public function getAddress()
-    {
-        return ($this->parent ? $this->parent->getAddress() . ', ' : '') . $this->name;
     }
 
     public function scopeRoots(Builder $query)

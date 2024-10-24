@@ -13,7 +13,7 @@ class RegionController extends Controller
         $this->middleware('can:manage-regions');
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $regions = Region::where('parent_id', null)->orderBy('name')->get();
 
@@ -36,25 +36,23 @@ class RegionController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:255|unique:regions,name,NULL,id,parent_id,' . ($request['parent'] ?: 'NULL'),
             'slug' => 'required|string|max:255|unique:regions,slug,NULL,id,parent_id,' . ($request['parent'] ?: 'NULL'),
-            'parent' => 'nullable|exists:regions,id'
+            'parent' => 'optional|exists:regions,id',
         ]);
 
-        $region = Region::create(
-            [
-                'name' => $request['name'],
-                'slug' => $request['slug'],
-                'parent_id' => $request['parent']
-            ]
-        );
+        $region = Region::create([
+            'name' => $request['name'],
+            'slug' => $request['slug'],
+            'parent_id' => $request['parent'],
+        ]);
 
         return redirect()->route('admin.regions.show', $region);
     }
 
     public function show(Region $region)
     {
-        $children = $region->children()->orderBy('name')->get();
+        $regions = Region::where('parent_id', $region->id)->orderBy('name')->get();
 
-        return view('admin.regions.show', compact('region', 'children'));
+        return view('admin.regions.show', compact('region', 'regions'));
     }
 
     public function edit(Region $region)
@@ -65,14 +63,13 @@ class RegionController extends Controller
     public function update(Request $request, Region $region)
     {
         $this->validate($request, [
-            'name' => "required|string|max:255|unique:regions,name,$region->id,id,parent_id,$region->parent_id",
-            'slug' => "required|string|max:255|unique:regions,slug,$region->id,id,parent_id,$region->parent_id",
+            'name' => 'required|string|max:255|unique:regions,name,' . $region->id . ',id,parent_id,' . $region->parent_id,
+            'slug' => 'required|string|max:255|unique:regions,slug,' . $region->id . ',id,parent_id,' . $region->parent_id,
         ]);
 
         $region->update([
             'name' => $request['name'],
             'slug' => $request['slug'],
-            'parent_id' => $request['parent'],
         ]);
 
         return redirect()->route('admin.regions.show', $region);

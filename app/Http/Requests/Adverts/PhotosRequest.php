@@ -6,15 +6,15 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PhotosRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
-            'file.*' => 'required|image|mimes:jpeg,png,jpg',
+            'files.*' => 'required|image|mimes:jpg,jpeg,png',
         ];
     }
 }

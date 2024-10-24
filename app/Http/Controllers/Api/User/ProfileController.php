@@ -52,7 +52,6 @@ class ProfileController extends Controller
         $this->service->edit($request->user()->id, $request);
 
         $user = User::findOrFail($request->user()->id);
-
         return new ProfileResource($user);
     }
 }

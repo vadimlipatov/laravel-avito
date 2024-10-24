@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 
 /**
+ * @property int $id
  * @property string $name
  * @property string $slug
- * @property int $parent_id
+ * @property int|null $parent_id
  *
- * @property Attribute[] $attributes
+ * @property int $depth
  * @property Category $parent
  * @property Category[] $children
- * @property int $depth
- * @property array $allAttributes
- * @property array $attributes
- * @property array $parentAttributes
+ * @property Attribute[] $attributes
  */
 class Category extends Model
 {
@@ -28,20 +26,22 @@ class Category extends Model
 
     protected $fillable = ['name', 'slug', 'parent_id'];
 
-    public function getPath(){
+    public function getPath(): string
+    {
         return implode('/', array_merge($this->ancestors()->defaultOrder()->pluck('slug')->toArray(), [$this->slug]));
     }
 
-    public function parentAttributes()
+    public function parentAttributes(): array
     {
-        return  $this->parent ? $this->parent->allAttributes() : [];
+        return $this->parent ? $this->parent->allAttributes() : [];
     }
 
-    public function allAttributes()
+    /**
+     * @return Attribute[]
+     */
+    public function allAttributes(): array
     {
-        $parent = $this->parentAttributes();
-        $owm = $this->attributes()->orderBy('sort')->getModels();
-        return array_merge($parent, $owm);
+        return array_merge($this->parentAttributes(), $this->attributes()->orderBy('sort')->getModels());
     }
 
     public function attributes()

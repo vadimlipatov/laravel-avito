@@ -31,7 +31,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Left Side Of Navbar -->
           <ul class="navbar-nav mr-auto">
-
+            {{-- @foreach (array_slice($menuPages, 0, 3) as $page)
+              <li><a class="nav-link" href="{{ route('page', page_path($page)) }}">{{ $page->getMenuTitle() }}</a></li>
+            @endforeach --}}
+            {{-- @if ($morePages = array_slice($menuPages, 3))
+              <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  More... <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  @foreach ($morePages as $page)
+                    <a class="dropdown-item"
+                      href="{{ route('page', page_path($page)) }}">{{ $page->getMenuTitle() }}</a>
+                  @endforeach
+                </div>
+              </li>
+            @endif --}}
           </ul>
 
           <!-- Right Side Of Navbar -->
@@ -50,8 +66,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="{{ route('admin.home') }}">Admin</a>
                   <a class="dropdown-item" href="{{ route('cabinet.home') }}">Cabinet</a>
-                  <a onclick="event.preventDefault();document.getElementById('logout-form').submit();"
-                    class="dropdown-item" href="{{ route('logout') }}">Logout
+                  <a class="dropdown-item" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                                       document.getElementById('logout-form').submit();">
+                    Logout
                   </a>
 
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

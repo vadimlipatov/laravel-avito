@@ -2,17 +2,21 @@
 
 namespace App\Http\Requests\Adverts;
 
+use App\Entity\Adverts\Advert\Advert;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * @property Advert $advert
+ */
 class AttributesRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    public function rules(): array
     {
         $items = [];
 
@@ -31,7 +35,7 @@ class AttributesRequest extends FormRequest
             if ($attribute->isSelect()) {
                 $rules[] = Rule::in($attribute->variants);
             }
-            $items['attribute.' . $attribute->id . '.value'] = $rules;
+            $items['attribute.' . $attribute->id] = $rules;
         }
 
         return $items;

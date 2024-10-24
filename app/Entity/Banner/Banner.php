@@ -28,8 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Region|null $region
  * @property Category $category
  *
- * @method static Builder active()
- * @method static Builder forUser(User $user)
+ * @method Builder active()
+ * @method Builder forUser(User $user)
  */
 class Banner extends Model
 {
@@ -53,7 +53,7 @@ class Banner extends Model
         return [
             self::STATUS_DRAFT => 'Draft',
             self::STATUS_MODERATION => 'On Moderation',
-            self::STATUS_MODERATED => 'Moderated',
+            self::STATUS_MODERATED => 'moderated',
             self::STATUS_ORDERED => 'Payment',
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_CLOSED => 'Closed',

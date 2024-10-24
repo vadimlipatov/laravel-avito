@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Entity\User;
+use App\Entity\User\User;
 use App\Http\Requests\Admin\Users\CreateRequest;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Users\UpdateRequest;
+use App\Http\Controllers\Controller;
 use App\UseCases\Auth\RegisterService;
 use Illuminate\Http\Request;
 
@@ -28,11 +28,11 @@ class UsersController extends Controller
         }
 
         if (!empty($value = $request->get('name'))) {
-            $query->where('name', 'like', "%{$value}%");
+            $query->where('name', 'like', '%' . $value . '%');
         }
 
         if (!empty($value = $request->get('email'))) {
-            $query->where('email', 'like', "%{$value}%");
+            $query->where('email', 'like', '%' . $value . '%');
         }
 
         if (!empty($value = $request->get('status'))) {
@@ -43,11 +43,16 @@ class UsersController extends Controller
             $query->where('role', $value);
         }
 
-        $users = $query->paginate(10);
+        $users = $query->paginate(20);
+
+        $statuses = [
+            User::STATUS_WAIT => 'Waiting',
+            User::STATUS_ACTIVE => 'Active',
+        ];
 
         $roles = User::rolesList();
 
-        return view('admin.users.index', compact('users', 'roles'));
+        return view('admin.users.index', compact('users', 'statuses', 'roles'));
     }
 
     public function create()
@@ -79,7 +84,11 @@ class UsersController extends Controller
 
     public function update(UpdateRequest $request, User $user)
     {
-        $user->update($request->only(['name', 'email', 'role']));
+        $user->update($request->only(['name', 'email']));
+
+        if ($request['role'] !== $user->role) {
+            $user->changeRole($request['role']);
+        }
 
         return redirect()->route('admin.users.show', $user);
     }

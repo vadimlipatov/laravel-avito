@@ -58,7 +58,7 @@ class SearchService
                                 $region ? ['term' => ['regions' => $region->id]] : false,
                                 !empty($request['text']) ? ['multi_match' => [
                                     'query' => $request['text'],
-                                    'fields' => ['title^3', 'content']
+                                    'fields' => [ 'title^3', 'content' ]
                                 ]] : false,
                             ]),
                             array_map(function ($value, $id) {

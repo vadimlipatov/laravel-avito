@@ -10,11 +10,11 @@ class ArraySender implements SmsSender
     {
         $this->messages[] = [
             'to' => '+' . trim($number, '+'),
-            'text' => $text,
+            'text' => $text
         ];
     }
 
-    public function getMessages()
+    public function getMessages(): array
     {
         return $this->messages;
     }

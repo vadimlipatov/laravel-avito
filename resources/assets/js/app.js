@@ -7,7 +7,7 @@
 require("./bootstrap");
 
 $(document).on("click", ".phone-button", function () {
-	const button = $(this);
+	var button = $(this);
 	axios
 		.post(button.data("source"))
 		.then(function (response) {
@@ -19,11 +19,11 @@ $(document).on("click", ".phone-button", function () {
 });
 
 $(".banner").each(function () {
-	const block = $(this);
-	const url = block.data("url");
-	const format = block.data("format");
-	const category = block.data("category");
-	const region = block.data("region");
+	var block = $(this);
+	var url = block.data("url");
+	var format = block.data("format");
+	var category = block.data("category");
+	var region = block.data("region");
 
 	axios
 		.get(url, {
@@ -42,8 +42,8 @@ $(".banner").each(function () {
 });
 
 $(document).on("click", ".location-button", function () {
-	const button = $(this);
-	const target = $(button.data("target"));
+	var button = $(this);
+	var target = $(button.data("target"));
 
 	window.geocode_callback = function (response) {
 		if (
@@ -62,12 +62,12 @@ $(document).on("click", ".location-button", function () {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(
 			function (position) {
-				const location =
+				var location =
 					position.coords.longitude + "," + position.coords.latitude;
-				const url =
+				var url =
 					"https://geocode-maps.yandex.ru/1.x/?format=json&callback=geocode_callback&geocode=" +
 					location;
-				const script = $("<script>").appendTo($("body"));
+				var script = $("<script>").appendTo($("body"));
 				script.attr("src", url);
 			},
 			function (error) {
@@ -78,3 +78,25 @@ $(document).on("click", ".location-button", function () {
 		alert("Unable to detect your location.");
 	}
 });
+
+(function ($) {
+	$(".summernote").summernote({
+		height: 300,
+		callbacks: {
+			onImageUpload: function (files) {
+				var editor = $(this);
+				var url = editor.data("image-url");
+				var data = new FormData();
+				data.append("file", files[0]);
+				axios
+					.post(url, data)
+					.then(function (response) {
+						editor.summernote("insertImage", response.data);
+					})
+					.catch(function (error) {
+						console.error(error);
+					});
+			},
+		},
+	});
+})(window.jQuery);

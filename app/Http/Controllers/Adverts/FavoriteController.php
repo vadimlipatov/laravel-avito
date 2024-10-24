@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Adverts;
 
 use App\Entity\Adverts\Advert\Advert;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Adverts\AttributesRequest;
+use App\Http\Requests\Adverts\EditRequest;
+use App\Http\Requests\Adverts\PhotosRequest;
+use App\UseCases\Adverts\AdvertService;
 use App\UseCases\Adverts\FavoriteService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class FavoriteController extends Controller
 {

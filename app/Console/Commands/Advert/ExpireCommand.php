@@ -11,8 +11,6 @@ class ExpireCommand extends Command
 {
     protected $signature = 'advert:expire';
 
-    protected $description = 'Close expired adverts';
-
     private $service;
 
     public function __construct(AdvertService $service)
@@ -24,9 +22,10 @@ class ExpireCommand extends Command
     public function handle(): bool
     {
         $success = true;
+
         foreach (Advert::active()->where('expired_at', '<', Carbon::now())->cursor() as $advert) {
             try {
-                $this->service->expire($advert->id);
+                $this->service->expire($advert);
             } catch (\DomainException $e) {
                 $this->error($e->getMessage());
                 $success = false;

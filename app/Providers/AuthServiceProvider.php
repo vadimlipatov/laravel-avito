@@ -25,10 +25,6 @@ class AuthServiceProvider extends ServiceProvider
 
     private function registerPermissions(): void
     {
-        Gate::define('horizon', function (User $user) {
-            return $user->isAdmin() || $user->isModerator();
-        });
-
         Gate::define('admin-panel', function (User $user) {
             return $user->isAdmin() || $user->isModerator();
         });
@@ -38,6 +34,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('manage-users', function (User $user) {
+            return $user->isAdmin() || $user->isModerator();
+        });
+
+        Gate::define('manage-tickets', function (User $user) {
             return $user->isAdmin() || $user->isModerator();
         });
 

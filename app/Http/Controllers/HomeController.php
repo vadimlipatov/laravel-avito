@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $regions  = Region::roots()->orderBy('name')->getModels();
+        $regions = Region::roots()->orderBy('name')->getModels();
 
         $categories = Category::whereIsRoot()->defaultOrder()->getModels();
 

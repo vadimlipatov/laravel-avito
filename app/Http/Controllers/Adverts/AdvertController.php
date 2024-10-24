@@ -8,7 +8,10 @@ use App\Entity\Region;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Adverts\SearchRequest;
 use App\Http\Router\AdvertsPath;
+use App\ReadModel\AdvertReadRepository;
 use App\UseCases\Adverts\SearchService;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -47,12 +50,9 @@ class AdvertController extends Controller
         });
 
         return view('adverts.index', compact(
-            'category',
-            'region',
-            'categories',
-            'regions',
-            'regionsCounts',
-            'categoriesCounts',
+            'category', 'region',
+            'categories', 'regions',
+            'regionsCounts', 'categoriesCounts',
             'adverts'
         ));
     }

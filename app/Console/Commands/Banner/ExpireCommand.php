@@ -28,7 +28,7 @@ class ExpireCommand extends Command
             if ($this->client->get($key)) {
                 continue;
             }
-            // Mail::to($banner->user->email)->queue(new BannerExpiresSoonMail($banner));
+            Mail::to($banner->user->email)->queue(new BannerExpiresSoonMail($banner));
             $this->client->set($key, true);
         }
 

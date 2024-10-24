@@ -13,7 +13,7 @@ class SmsRu implements SmsSender
     public function __construct($appId, $url = 'https://sms.ru/sms/send')
     {
         if (empty($appId)) {
-            throw new \InvalidArgumentException('Application ID is required for SmsRu');
+            throw new \InvalidArgumentException('Sms appId must be set.');
         }
 
         $this->appId = $appId;
@@ -27,7 +27,7 @@ class SmsRu implements SmsSender
             'form_params' => [
                 'api_id' => $this->appId,
                 'to' => '+' . trim($number, '+'),
-                'text' => $text,
+                'text' => $text
             ],
         ]);
     }

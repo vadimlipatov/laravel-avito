@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Cabinet\Adverts;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\FilledProfile;
-use App\Http\Requests\Cabinet\Adverts\CreateRequest;
+use App\Http\Requests\Adverts\CreateRequest;
 use App\UseCases\Adverts\AdvertService;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class CreateController extends Controller
 {
@@ -16,7 +15,6 @@ class CreateController extends Controller
 
     public function __construct(AdvertService $service)
     {
-        $this->middleware(FilledProfile::class);
         $this->service = $service;
     }
 
@@ -31,7 +29,7 @@ class CreateController extends Controller
     {
         $regions = Region::where('parent_id', $region ? $region->id : null)->orderBy('name')->get();
 
-        return view('cabinet.adverts.create.region', compact('regions'));
+        return view('cabinet.adverts.create.region', compact('category', 'region', 'regions'));
     }
 
     public function advert(Category $category, Region $region = null)

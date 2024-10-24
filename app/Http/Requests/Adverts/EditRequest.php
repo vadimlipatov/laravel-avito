@@ -5,6 +5,7 @@ namespace App\Http\Requests\Adverts;
 use App\Entity\Adverts\Category;
 use App\Entity\Region;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @property Category $category

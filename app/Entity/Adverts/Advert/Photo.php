@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property string $file
+ * @property string file
  */
 class Photo extends Model
 {

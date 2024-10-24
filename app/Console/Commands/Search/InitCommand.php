@@ -17,7 +17,7 @@ class InitCommand extends Command
         parent::__construct();
         $this->client = $client;
     }
-
+    
     public function handle(): bool
     {
         $this->initAdverts();
