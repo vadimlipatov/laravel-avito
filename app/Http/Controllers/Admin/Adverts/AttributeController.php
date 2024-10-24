@@ -5,68 +5,81 @@ namespace App\Http\Controllers\Admin\Adverts;
 use App\Entity\Adverts\Attribute;
 use App\Entity\Adverts\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Adverts\AttributeRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AttributeController extends Controller
 {
-	public function __construct()
-	{
-		$this->middleware('can:manage-adverts-categories');
-	}
+    public function __construct()
+    {
+        $this->middleware('can:manage-adverts-categories');
+    }
 
-	public function create(Category $category)
-	{
-		$types = Attribute::typesList();
+    public function create(Category $category)
+    {
+        $types = Attribute::typesList();
 
-		return view('admin.adverts.categories.attributes.create', compact('types', 'category'));
-	}
+        return view('admin.adverts.categories.attributes.create', compact('category', 'types'));
+    }
 
-	public function store(AttributeRequest $request, Category $category)
-	{
-		$attribute = $category->attributes()->create(
-			[
-				'name' => $request['name'],
-				'type' => $request['type'],
-				'required' => (bool)$request['required'],
-				'variants' => array_map('trim', preg_split('#[\r\n]+#', $request['variants'])),
-				'sort' => $request['sort'],
-			]
-		);
+    public function store(Request $request, Category $category)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'type' => ['required', 'string', 'max:255', Rule::in(array_keys(Attribute::typesList()))],
+            'required' => 'nullable|string|max:255',
+            'variants' => 'nullable|string',
+            'sort' => 'required|integer',
+        ]);
 
-		return redirect()->route('admin.adverts.categories.attributes.show', [$category, $attribute]);
-	}
+        $attribute = $category->attributes()->create([
+            'name' => $request['name'],
+            'type' => $request['type'],
+            'required' => (bool)$request['required'],
+            'variants' => array_map('trim', preg_split('#[\r\n]+#', $request['variants'])),
+            'sort' => $request['sort'],
+        ]);
 
-	public function show(Category $category, Attribute $attribute)
-	{
-		return view('admin.adverts.categories.attributes.show', compact('category', 'attribute'));
-	}
+        return redirect()->route('admin.adverts.categories.attributes.show', [$category, $attribute]);
+    }
 
-	public function edit(Category $category, Attribute $attribute)
-	{
-		$types = Attribute::typesList();
+    public function show(Category $category, Attribute $attribute)
+    {
+        return view('admin.adverts.categories.attributes.show', compact('category', 'attribute'));
+    }
 
-		return view('admin.adverts.categories.attributes.edit', compact('category', 'attribute', 'types'));
-	}
+    public function edit(Category $category, Attribute $attribute)
+    {
+        $types = Attribute::typesList();
 
-	public function update(AttributeRequest $request, Category $category, Attribute $attribute)
-	{
-		$category->attributes()->findOrFail($attribute->id)->update(
-			[
-				'name' => $request['name'],
-				'type' => $request['type'],
-				'required' => (bool)$request['required'],
-				'variants' => array_map('trim', preg_split('#[\r\n]+#', $request['variants'])),
-				'sort' => $request['sort'],
-			]
-		);
+        return view('admin.adverts.categories.attributes.edit', compact('category', 'attribute', 'types'));
+    }
 
-		return redirect()->route('admin.adverts.categories.attributes.show', [$category, $attribute]);
-	}
+    public function update(Request $request, Category $category, Attribute $attribute)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'type' => ['required', 'string', 'max:255', Rule::in(array_keys(Attribute::typesList()))],
+            'required' => 'nullable|string|max:255',
+            'variants' => 'nullable|string',
+            'sort' => 'required|integer',
+        ]);
 
-	public function destroy(Category $category, Attribute $attribute)
-	{
-		$category->attributes()->findOrFail($attribute->id)->delete();
+        $category->attributes()->findOrFail($attribute->id)->update([
+            'name' => $request['name'],
+            'type' => $request['type'],
+            'required' => (bool)$request['required'],
+            'variants' => array_map('trim', preg_split('#[\r\n]+#', $request['variants'])),
+            'sort' => $request['sort'],
+        ]);
 
-		return redirect()->route('admin.adverts.categories.show', $category);
-	}
+        return redirect()->route('admin.adverts.categories.show', $category);
+    }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+
+        return redirect()->route('admin.adverts.categories.show', $category);
+    }
 }

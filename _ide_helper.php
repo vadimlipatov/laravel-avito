@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.40 on 2024-10-23 10:17:36.
+ * Generated for Laravel 5.6.40 on 2024-10-24 13:05:00.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -15281,6 +15281,45 @@ namespace Laravel\Socialite\Facades {
  
 }
 
+namespace Mews\Purifier\Facades { 
+
+    /**
+     * 
+     *
+     * @see \Mews\Purifier
+     */ 
+    class Purifier {
+        
+        /**
+         * 
+         *
+         * @param $dirty
+         * @param null $config
+         * @return mixed 
+         * @static 
+         */ 
+        public static function clean($dirty, $config = null)
+        {
+                        /** @var \Mews\Purifier\Purifier $instance */
+                        return $instance->clean($dirty, $config);
+        }
+        
+        /**
+         * Get HTMLPurifier instance.
+         *
+         * @return \HTMLPurifier 
+         * @static 
+         */ 
+        public static function getInstance()
+        {
+                        /** @var \Mews\Purifier\Purifier $instance */
+                        return $instance->getInstance();
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -17806,6 +17845,8 @@ namespace  {
     class Flash extends \Laracasts\Flash\Flash {}
 
     class Socialite extends \Laravel\Socialite\Facades\Socialite {}
+
+    class Purifier extends \Mews\Purifier\Facades\Purifier {}
  
 }
 

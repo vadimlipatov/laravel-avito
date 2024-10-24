@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin\Adverts;
 
 use App\Entity\Adverts\Advert\Advert;
-use App\Entity\User;
+use App\Entity\User\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Adverts\AttributesRequest;
 use App\Http\Requests\Adverts\EditRequest;
 use App\Http\Requests\Adverts\PhotosRequest;
 use App\Http\Requests\Adverts\RejectRequest;
 use App\UseCases\Adverts\AdvertService;
-use Request;
+use Illuminate\Http\Request;
 
 class AdvertController extends Controller
 {
@@ -56,7 +56,7 @@ class AdvertController extends Controller
 
         $roles = User::rolesList();
 
-        return view('adverts.index', compact('adverts', 'statuses', 'roles'));
+        return view('admin.adverts.adverts.index', compact('adverts', 'statuses', 'roles'));
     }
 
     public function editForm(Advert $advert)
@@ -75,7 +75,8 @@ class AdvertController extends Controller
         return redirect()->route('adverts.show', $advert);
     }
 
-    public function attributesForm(AttributesRequest $request, Advert $advert){
+    public function attributesForm(Advert $advert)
+    {
         return view('adverts.edit.attributes', compact('advert'));
     }
 

@@ -4,9 +4,11 @@ use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Adverts\Attribute;
 use App\Entity\Adverts\Category;
 use App\Entity\Banner\Banner;
+use App\Entity\Page;
 use App\Entity\Region;
-use App\Entity\User\User as EntityUser;
+use App\Entity\User\User;
 use App\Http\Router\AdvertsPath;
+use App\Http\Router\PagePath;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator as Crumbs;
 
 Breadcrumbs::register('home', function (Crumbs $crumbs) {
@@ -38,6 +40,15 @@ Breadcrumbs::register('password.reset', function (Crumbs $crumbs) {
     $crumbs->push('Change', route('password.reset'));
 });
 
+Breadcrumbs::register('page', function (Crumbs $crumbs, PagePath $path) {
+    if ($parent = $path->page->parent) {
+        $crumbs->parent('page', $path->withPage($path->page->parent));
+    } else {
+        $crumbs->parent('home');
+    }
+    $crumbs->push($path->page->title, route('page', $path));
+});
+
 // Adverts
 
 Breadcrumbs::register('adverts.inner_region', function (Crumbs $crumbs, AdvertsPath $path) {
@@ -61,6 +72,16 @@ Breadcrumbs::register('adverts.inner_category', function (Crumbs $crumbs, Advert
     if ($path->category) {
         $crumbs->push($path->category->name, route('adverts.index', $path));
     }
+});
+
+Breadcrumbs::register('adverts.index', function (Crumbs $crumbs, AdvertsPath $path = null) {
+    $path = $path ?: adverts_path(null, null);
+    $crumbs->parent('adverts.inner_category', $path, $path);
+});
+
+Breadcrumbs::register('adverts.show', function (Crumbs $crumbs, Advert $advert) {
+    $crumbs->parent('adverts.index', adverts_path($advert->region, $advert->category));
+    $crumbs->push($advert->title, route('adverts.show', $advert));
 });
 
 // Cabinet
@@ -107,7 +128,7 @@ Breadcrumbs::register('cabinet.adverts.create.advert', function (Crumbs $crumbs,
     $crumbs->push($region ? $region->name : 'All', route('cabinet.adverts.create.advert', [$category, $region]));
 });
 
-// Cabinet Favorites
+// Favorites
 
 Breadcrumbs::register('cabinet.favorites.index', function (Crumbs $crumbs) {
     $crumbs->parent('cabinet.home');
@@ -170,14 +191,62 @@ Breadcrumbs::register('admin.users.create', function (Crumbs $crumbs) {
     $crumbs->push('Create', route('admin.users.create'));
 });
 
-Breadcrumbs::register('admin.users.show', function (Crumbs $crumbs, EntityUser $user) {
+Breadcrumbs::register('admin.users.show', function (Crumbs $crumbs, User $user) {
     $crumbs->parent('admin.users.index');
     $crumbs->push($user->name, route('admin.users.show', $user));
 });
 
-Breadcrumbs::register('admin.users.edit', function (Crumbs $crumbs, EntityUser $user) {
+Breadcrumbs::register('admin.users.edit', function (Crumbs $crumbs, User $user) {
     $crumbs->parent('admin.users.show', $user);
     $crumbs->push('Edit', route('admin.users.edit', $user));
+});
+
+// Pages
+
+Breadcrumbs::register('admin.pages.index', function (Crumbs $crumbs) {
+    $crumbs->parent('admin.home');
+    $crumbs->push('Pages', route('admin.pages.index'));
+});
+
+Breadcrumbs::register('admin.pages.create', function (Crumbs $crumbs) {
+    $crumbs->parent('admin.pages.index');
+    $crumbs->push('Create', route('admin.pages.create'));
+});
+
+Breadcrumbs::register('admin.pages.show', function (Crumbs $crumbs, Page $page) {
+    if ($parent = $page->parent) {
+        $crumbs->parent('admin.pages.show', $parent);
+    } else {
+        $crumbs->parent('admin.pages.index');
+    }
+    $crumbs->push($page->title, route('admin.pages.show', $page));
+});
+
+Breadcrumbs::register('admin.pages.edit', function (Crumbs $crumbs, Page $page) {
+    $crumbs->parent('admin.pages.show', $page);
+    $crumbs->push('Edit', route('admin.pages.edit', $page));
+});
+
+// Banners
+
+Breadcrumbs::register('admin.banners.index', function (Crumbs $crumbs) {
+    $crumbs->parent('admin.home');
+    $crumbs->push('Banners', route('admin.banners.index'));
+});
+
+Breadcrumbs::register('admin.banners.show', function (Crumbs $crumbs, Banner $banner) {
+    $crumbs->parent('admin.banners.index');
+    $crumbs->push($banner->name, route('admin.banners.show', $banner));
+});
+
+Breadcrumbs::register('admin.banners.edit', function (Crumbs $crumbs, Banner $banner) {
+    $crumbs->parent('admin.banners.show', $banner);
+    $crumbs->push('Edit', route('admin.banners.edit', $banner));
+});
+
+Breadcrumbs::register('admin.banners.reject', function (Crumbs $crumbs, Banner $banner) {
+    $crumbs->parent('admin.banners.show', $banner);
+    $crumbs->push('Reject', route('admin.banners.reject', $banner));
 });
 
 // Regions
