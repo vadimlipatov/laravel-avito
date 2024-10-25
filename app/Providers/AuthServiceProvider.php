@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Entity\Adverts\Advert\Advert;
 use App\Entity\Banner\Banner;
+use App\Entity\Ticket\Ticket;
 use App\Entity\User\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Horizon\Horizon;
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
@@ -67,6 +69,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('manage-own-banner', function (User $user, Banner $banner) {
             return $banner->user_id === $user->id;
+        });
+
+        Gate::define('manage-own-ticket', function (User $user, Ticket $ticket) {
+            return $ticket->user_id === $user->id;
         });
     }
 }
