@@ -13,14 +13,15 @@
 		"doctrine/dbal": "^2.13",
 		"elasticsearch/elasticsearch": "^6.0",
 		"fideloper/proxy": "^4.0",
-		"mews/purifier": "^2.1",
 		"guzzlehttp/guzzle": "^6.5",
 		"kalnoy/nestedset": "^4.3",
 		"laracasts/flash": "^3.2",
 		"laravel/framework": "5.6.*",
+		"laravel/horizon": "2.1",
 		"laravel/passport": "*",
 		"laravel/socialite": "*",
 		"laravel/tinker": "^1.0",
+		"mews/purifier": "^2.1",
 		"predis/predis": "^1.1"
 	},
 	"require-dev": {
